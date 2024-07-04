@@ -15,7 +15,7 @@ use CodeIgniter\Router\RouteCollection;
 
 
 $routes->get('/', 'Home::index');
-$routes->get('dashboard', 'Dashboard::index', ['filter' => 'authGuard']);
+$routes->get('dashboard', 'Publikasi::dashboard', ['filter' => 'authGuard']);
 $routes->get('auth/login', 'Auth::login');
 $routes->get('login', 'Auth::login');
 $routes->get('auth/ssoCallback', 'Auth::ssoCallback');
@@ -23,6 +23,8 @@ $routes->get('auth/logout', 'Auth::logout');
 $routes->get('auth/switchRole/(:num)', 'Auth::switchRole/$1');
 $routes->get('publikasi', 'Publikasi::index');
 $routes->get('Publikasi', 'Publikasi::index');
+$routes->get('Publikasi/ajupublikasi', 'Publikasi::Ajupublikasi');
+
 
 
 // $routes->get('/layanan/form', 'Layanan::form');

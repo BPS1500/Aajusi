@@ -77,7 +77,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?= base_url('aksi_layanan_ti') ?>" class="nav-link">
+                                    <a href="<?= base_url('/Publikasi/ajupublikasi') ?>" class="nav-link">
                                         <i class="far fa-eye"></i>
                                         <p>Pengajuan Publikasi</p>
                                     </a>

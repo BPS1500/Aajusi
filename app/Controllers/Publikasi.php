@@ -26,17 +26,35 @@ class Publikasi extends BaseController
         //dd($data);
         return view('pengajuan_publikasi/index', $data);
     }
-    // public function Ajupublikasi()
-    // {
-    //     $data = [
-    //         'judul' => 'Pengajuan Publikasi',
-    //         'page' => 'v_ajupublikasi',
-    //         'Ajupublikasi' => $this->ModelPublikasi->AllData(),
-    //         'jenispublikasi' => $this->ModelPublikasi->AllJenispublikasi(),
-    //         'fungsi' => $this->ModelPublikasi->AllFungsi(),
-    //     ];
-    //     return view('pengajuan_publikasi/index', $data);;
-    // }
+
+    public function dashboard()
+    {
+        $datadash = $this->ModelPublikasi->dashData();
+        $statuspublikasi = $this->ModelPublikasi->getMstStatusReview();
+        $data = [
+            'menu' => 'Dasbor',
+            'judul' => 'Dasbor Penyusun',
+            'page' => 'v_penyusun',
+            'dataDashboard' => $datadash,
+            'status' => $statuspublikasi
+        ];
+        //dd($data);
+        return view('dashboard', $data);
+    }
+    
+    public function Ajupublikasi()
+    {
+        $data = [
+            'judul' => 'Pengajuan Publikasi',
+            'page' => 'v_ajupublikasi',
+            'Ajupublikasi' => $this->ModelPublikasi->AllData(),
+            'jenispublikasi' => $this->ModelPublikasi->AllJenispublikasi(),
+            'fungsi' => $this->ModelPublikasi->AllFungsi(),
+        ];
+        return view('pengajuan_publikasi/ajupublikasi', $data);
+    }
+
+
     // public function Judulpublikasi()
     // {
     //     $id_jenispublikasi = $this->request->getPost('id_jenispublikasi');
