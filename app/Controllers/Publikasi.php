@@ -54,16 +54,31 @@ class Publikasi extends BaseController
         return view('pengajuan_publikasi/ajupublikasi', $data);
     }
 
+    public function Judulpublikasi()
+    {
+        $id_jenispublikasi = $this->request->getPost('id_jenispublikasi');
+        $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
+        echo '<option value="">--Pilih Judul Publikasi--</option>';
+        foreach ($judulpublikasi as $key => $jp) {
+            echo "<option value=" . $jp['id'] . ">" . $jp['judul_publikasi_ind'] . "</option>";
+        }
+        //dd($data);
+        return view('ajupublikasi', $judulpublikasi);
+    }
 
-    // public function Judulpublikasi()
-    // {
-    //     $id_jenispublikasi = $this->request->getPost('id_jenispublikasi');
-    //     $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
-    //     echo '<option value="">--Pilih Judul Publikasi--</option>';
-    //     foreach ($judulpublikasi as $key => $jp) {
-    //         echo "<option value=" . $jp['id'] . ">" . $jp['judul_publikasi_ind'] . "</option>";
-    //     }
-    // }
+    public function LihatKomentar($id_publikasi)
+    {
+        $dataKomentar = $this->ModelPublikasi->OneDataKomenter($id_publikasi);
+        $data = [
+            'judul' => 'Komentar',
+            'page' => 'v_komentar_penyusun',
+            'Komentar' => $dataKomentar,
+            'id_publikasi' => $id_publikasi,
+        ];
+
+        return view('komentar_penyusun', $data);
+    }
+    
     // public function InsertData()
     // {
 
@@ -129,21 +144,6 @@ class Publikasi extends BaseController
     //         return redirect()->to(base_url('Publikasi/Ajupublikasi'))->withInput('validation', \Config\Services::validation());
     //     }
     // }
-
-    // public function LihatKomentar($id_publikasi)
-    // {
-    //     $dataKomentar = $this->ModelPublikasi->OneDataKomenter($id_publikasi);
-    //     $data = [
-    //         'judul' => 'Komentar',
-    //         'page' => 'v_komentar_penyusun',
-    //         'Komentar' => $dataKomentar,
-    //         'id_publikasi' => $id_publikasi,
-    //     ];
-
-    //     return view('v_template_penyusun', $data);
-    // }
-
-
 
     // public function getLink()
     // {

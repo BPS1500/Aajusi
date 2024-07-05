@@ -24,7 +24,7 @@
             <div class="card-body form-group form-group-sm">
                 <div class="required">
                     <div class="form-group">
-                        <label>Jenis Publikasi</label>
+                         <label>Jenis Publikasi</label>
                         <select name="id_jenispublikasi" id="id_jenispublikasi" class="form-control" required>
                             <option value="">--Pilih Jenis Publikasi--</option>
                             <?php
@@ -111,7 +111,5 @@
             })
         });
 
-
     })
-</script>
 <?= $this->endSection() ?>

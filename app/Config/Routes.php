@@ -1,6 +1,8 @@
 <?php
 
 use App\Controllers\Publikasi;
+use App\Filters\AuthGuard;
+use CodeIgniter\Commands\Utilities\Routes;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -24,6 +26,7 @@ $routes->get('auth/switchRole/(:num)', 'Auth::switchRole/$1');
 $routes->get('publikasi', 'Publikasi::index');
 $routes->get('Publikasi', 'Publikasi::index');
 $routes->get('Publikasi/ajupublikasi', 'Publikasi::Ajupublikasi');
+$routes->post('Publikasi/Judulpublikasi/(:num)', 'Publikasi::Judulpublikasi/$1');
 
 
 
@@ -47,19 +50,19 @@ $routes->get('Publikasi/ajupublikasi', 'Publikasi::Ajupublikasi');
 // $routes->group('', ['filter' => 'auth'], function ($routes) {
 //     $routes->get('/dashboard', 'Dashboard::index');
 
-//     // Layanan TI
-//     // $routes->group('layanan_ti', function ($routes) {
-//     // $routes->get('pengajuan', 'LayananTI::pengajuan');
-//     // $routes->get('status', 'LayananTI::status');
-//     // $routes->get('penanganan', 'LayananTI::penanganan', ['filter' => 'teknisiOrAdmin']);
-//     //     $routes->get('pengajuan', 'LayananTI::index');
-//     //     $routes->get('create', 'LayananTI::create');
-//     //     $routes->post('store', 'LayananTI::store');
-//     //     $routes->get('assign/(:num)', 'LayananTI::assign/$1');
-//     //     $routes->get('print/(:num)', 'LayananTI::print/$1');
-//     //     $routes->get('status', 'StatusController::index');
-//     //     $routes->get('penanganan', 'PenangananController::index', ['filter' => 'role:teknisi,admin']);
-//     // });
+    // Layanan TI
+    // $routes->group('layanan_ti', function ($routes) {
+    // $routes->get('pengajuan', 'LayananTI::pengajuan');
+    // $routes->get('status', 'LayananTI::status');
+    // $routes->get('penanganan', 'LayananTI::penanganan', ['filter' => 'teknisiOrAdmin']);
+    //     $routes->get('pengajuan', 'LayananTI::index');
+    //     $routes->get('create', 'LayananTI::create');
+    //     $routes->post('store', 'LayananTI::store');
+    //     $routes->get('assign/(:num)', 'LayananTI::assign/$1');
+    //     $routes->get('print/(:num)', 'LayananTI::print/$1');
+    //     $routes->get('status', 'StatusController::index');
+    //     $routes->get('penanganan', 'PenangananController::index', ['filter' => 'role:teknisi,admin']);
+    // });
 
 
 //     $routes->group('layanan_ti', function ($routes) {

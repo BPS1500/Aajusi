@@ -186,6 +186,32 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function() {
+
+            $('#tabel_publikasi').DataTable({
+                language: {
+                    search: "Pencarian:",
+                    lengthMenu: "_MENU_  Data per Halaman",
+                    page: "Halaman",
+                    info: "Menampilkan Halaman _PAGE_ dari _PAGES_"
+
+                }
+            });
+            $(document).ready(function() {
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+            $('#tblmasterpub').DataTable({
+                language: {
+                    search: "Pencarian:",
+                    lengthMenu: "_MENU_  Data per Halaman",
+                    page: "Halaman",
+                    info: "Menampilkan Halaman _PAGE_ dari _PAGES_"
+
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
