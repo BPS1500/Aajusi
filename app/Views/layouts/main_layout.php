@@ -18,7 +18,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
 </head>
-</head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -51,70 +50,57 @@
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <li class="nav-item">
-                            <a href="<?= base_url('/dashboard') ?>" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Dashbor
-                                </p>
-                            </a>
-                        </li>
+                        <?php
+                        // Dapatkan role_id dari sesi
+                        $role_id = session()->get('role');
 
-                        <!-- Layanan TI -->
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-network-wired"></i>
-                                <p>
-                                    Publikasi
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="<?= base_url('/Publikasi') ?>" class="nav-link">
-                                        <i class="far fa-eye"></i>
-                                        <p>Status Pengajuan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= base_url('/Publikasi/ajupublikasi') ?>" class="nav-link">
-                                        <i class="far fa-eye"></i>
-                                        <p>Pengajuan Publikasi</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        // Query untuk mendapatkan menu berdasarkan role_id
+                        $db = \Config\Database::connect();
+                        $builder = $db->table('role_menu');
+                        $builder->select('menus.id, menus.menu_name, menus.menu_link, menus.parent_id');
+                        $builder->join('menus', 'menus.id = role_menu.menu_id');
+                        $builder->where('role_menu.role_id', $role_id);
+                        $menus = $builder->get()->getResult();
 
-                        <li class="nav-item">
-                            <a href="<?= base_url('/dashboard') ?>" class="nav-link">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>
-                                    Panduan
-                                </p>
-                            </a>
-                        </li>
+                        // Buat array untuk menampung menu
+                        $menuArray = [];
+                        foreach ($menus as $menu) {
+                            $menuArray[$menu->parent_id][] = $menu;
+                        }
 
-                        <!-- Settings (Only for Admin) -->
-                        <?php if (in_array('admin', session()->get('roles'))) : ?>
-                            <li class="nav-item">
-                                <a href="<?= base_url('/pengaturan') ?>" class="nav-link">
-                                    <i class="nav-icon fas fa-cogs"></i>
-                                    <p>
-                                        Pengaturan
-                                    </p>
-                                </a>
-                            </li>
-                        <?php endif; ?>
+                        // Dapatkan URL saat ini
+                        $currentURL = current_url();
 
-                        <!-- Add more menu items here as needed -->
-                        <!-- <li class="nav-item">
-                            <a href="<?= base_url('/another_menu') ?>" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Another Menu
-                                </p>
-                            </a>
-                        </li> -->
+                        // Fungsi untuk menampilkan menu
+                        function display_menu($parent_id, $menuArray, $currentURL) {
+                            if (isset($menuArray[$parent_id])) {
+                                foreach ($menuArray[$parent_id] as $menu) {
+                                    $active = ($currentURL == base_url($menu->menu_link)) ? 'active' : '';
+                                    if (isset($menuArray[$menu->id])) {
+                                        echo '<li class="nav-item has-treeview ' . $active . '">';
+                                        echo '<a href="#" class="nav-link ' . $active . '">';
+                                        echo '<i class="nav-icon fas fa-circle"></i>';
+                                        echo '<p>' . $menu->menu_name . '<i class="right fas fa-angle-left"></i></p>';
+                                        echo '</a>';
+                                        echo '<ul class="nav nav-treeview">';
+                                        display_menu($menu->id, $menuArray, $currentURL);
+                                        echo '</ul>';
+                                        echo '</li>';
+                                    } else {
+                                        echo '<li class="nav-item">';
+                                        echo '<a href="' . base_url($menu->menu_link) . '" class="nav-link ' . $active . '">';
+                                        echo '<i class="nav-icon fas fa-circle"></i>';
+                                        echo '<p>' . $menu->menu_name . '</p>';
+                                        echo '</a>';
+                                        echo '</li>';
+                                    }
+                                }
+                            }
+                        }
+
+                        // Tampilkan menu utama
+                        display_menu(NULL, $menuArray, $currentURL);
+                        ?>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -138,7 +124,6 @@
     <script src="<?= base_url('assets/AdminLTE/plugins/jquery/jquery.min.js') ?>"></script>
     <script src="<?= base_url('assets/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= base_url('assets/AdminLTE/dist/js/adminlte.min.js') ?>"></script>
-
 
     <script src="<?= base_url('assets/AdminLTE/plugins/datatables/jquery.dataTables.min.js') ?>"></script>
     <script src="<?= base_url('assets/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
@@ -195,7 +180,6 @@
                     lengthMenu: "_MENU_  Data per Halaman",
                     page: "Halaman",
                     info: "Menampilkan Halaman _PAGE_ dari _PAGES_"
-
                 }
             });
             $(document).ready(function() {
@@ -207,7 +191,6 @@
                     lengthMenu: "_MENU_  Data per Halaman",
                     page: "Halaman",
                     info: "Menampilkan Halaman _PAGE_ dari _PAGES_"
-
                 }
             });
         });
