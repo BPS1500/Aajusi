@@ -27,7 +27,22 @@ $routes->get('publikasi', 'Publikasi::index');
 $routes->get('Publikasi', 'Publikasi::index');
 $routes->get('Publikasi/ajupublikasi', 'Publikasi::Ajupublikasi');
 $routes->post('Publikasi/Judulpublikasi/(:num)', 'Publikasi::Judulpublikasi/$1');
+$routes->post('Publikasi/ajupublikasi.(:num)', 'Publikasi::Ajupublikasi/$1');
+$routes->post('Publikasi/Judulpublikasi', 'Publikasi::Judulpublikasi');
 
+$routes->get('pengajuan/publikasi', 'Publikasi::index');
+$routes->get('pengajuan/Publikasi', 'Publikasi::index');
+$routes->get('pengajuan/publikasi/ajupublikasi', 'Publikasi::Ajupublikasi');
+$routes->post('pengajuan/publikasi/Judulpublikasi/(:num)', 'Publikasi::Judulpublikasi/$1');
+
+// Routes for SPRP CRUD
+$routes->get('/sprp', 'SprpController::index');
+$routes->get('pengajuan/sprp', 'SprpController::index');
+$routes->get('/sprp/create', 'SprpController::create');
+$routes->post('/sprp/store', 'SprpController::store');
+$routes->get('/sprp/edit/(:num)', 'SprpController::edit/$1');
+$routes->post('/sprp/update/(:num)', 'SprpController::update/$1');
+$routes->get('/sprp/delete/(:num)', 'SprpController::delete/$1');
 
 
 // $routes->get('/layanan/form', 'Layanan::form');

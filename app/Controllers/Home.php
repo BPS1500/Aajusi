@@ -10,7 +10,7 @@ class Home extends Controller
     {
         // Render view home.php
         return view('home', [
-            'title' => 'SiNanTI - Sistem Layanan TI'
+            'title' => 'Aajusi - Portal Publikasi BPS Provinsi Jambi'
         ]);
     }
 }

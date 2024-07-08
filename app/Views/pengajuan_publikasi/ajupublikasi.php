@@ -24,19 +24,13 @@
             <div class="card-body form-group form-group-sm">
                 <div class="required">
                     <div class="form-group">
-                         <label>Jenis Publikasi</label>
+                        <label>Jenis Publikasi</label>
                         <select name="id_jenispublikasi" id="id_jenispublikasi" class="form-control" required>
                             <option value="">--Pilih Jenis Publikasi--</option>
-                            <?php
-
-                            use CodeIgniter\Database\BaseUtils;
-                            use Faker\Provider\Base;
-
-                            foreach ($jenispublikasi as $key => $value) { ?>
-                                <option value="<?= $value['id_jenispublikasi'] ?>"> <?= $value['jenis_publikasi'] ?></option>
+                            <?php foreach ($jenispublikasi as $value) { ?>
+                                <option value="<?= $value['id_jenispublikasi'] ?>"><?= $value['jenis_publikasi'] ?></option>
                             <?php } ?>
                         </select>
-                        <p class="text-danger"><?= $validation->hasError('jenis_publikasi') ? $validation->getError('jenis_publikasi') : '' ?></p>
                     </div>
                     <input type="hidden" id="id_user_upload" name="id_user_upload" value="<?= $_SESSION['nip_lama'] ?>">
                     <div class="form-group">
@@ -44,7 +38,6 @@
                         <select name="id_judulpublikasi" id="id_judulpublikasi" class="form-control" required>
                             <option value="">--Pilih Judul Publikasi--</option>
                         </select>
-                        <p class="text-danger"><?= $validation->hasError('id_judulpublikasi') ? $validation->getError('id_judulpublikasi') : '' ?></p>
                     </div>
                     <div class="form-group">
                         <label>Fungsi Pengusul</label>
@@ -95,21 +88,21 @@
 
 <script>
     $(document).ready(function() {
-
         $("#id_jenispublikasi").change(function(e) {
             var id_jenispublikasi = $("#id_jenispublikasi").val();
             console.log(id_jenispublikasi);
             $.ajax({
-                type: 'post',
+                type: 'POST',
                 url: "<?= base_url('Publikasi/Judulpublikasi') ?>",
                 data: {
                     id_jenispublikasi: id_jenispublikasi
                 },
                 success: function(response) {
                     $("#id_judulpublikasi").html(response);
+                    console.log(response);
                 }
             })
         });
-
-    })
+    });
+</script>
 <?= $this->endSection() ?>

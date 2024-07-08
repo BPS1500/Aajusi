@@ -41,7 +41,7 @@ class Publikasi extends BaseController
         //dd($data);
         return view('dashboard', $data);
     }
-    
+
     public function Ajupublikasi()
     {
         $data = [
@@ -54,17 +54,33 @@ class Publikasi extends BaseController
         return view('pengajuan_publikasi/ajupublikasi', $data);
     }
 
+    // public function Judulpublikasi()
+    // {
+
+    //     $id_jenispublikasi = $this->request->getPost('id_jenispublikasi');
+    //     dd($id_jenispublikasi);
+    //     $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
+    //     echo '<option value="">--Pilih Judul Publikasi--</option>';
+    //     foreach ($judulpublikasi as $key => $jp) {
+    //         echo "<option value=" . $jp['id'] . ">" . $jp['judul_publikasi_ind'] . "</option>";
+    //     }
+
+    //     return view('ajupublikasi', $judulpublikasi);
+    // }
+
     public function Judulpublikasi()
     {
         $id_jenispublikasi = $this->request->getPost('id_jenispublikasi');
         $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
-        echo '<option value="">--Pilih Judul Publikasi--</option>';
-        foreach ($judulpublikasi as $key => $jp) {
-            echo "<option value=" . $jp['id'] . ">" . $jp['judul_publikasi_ind'] . "</option>";
+        dd($judulpublikasi);
+        $options = '<option value="">--Pilih Judul Publikasi--</option>';
+        foreach ($judulpublikasi as $jp) {
+            $options .= "<option value='{$jp['id']}'>{$jp['judul_publikasi_ind']}</option>";
         }
-        //dd($data);
-        return view('ajupublikasi', $judulpublikasi);
+
+        return $this->response->setContentType('application/json')->setBody($options);
     }
+
 
     public function LihatKomentar($id_publikasi)
     {
@@ -78,7 +94,7 @@ class Publikasi extends BaseController
 
         return view('komentar_penyusun', $data);
     }
-    
+
     // public function InsertData()
     // {
 
