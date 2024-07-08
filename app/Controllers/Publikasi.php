@@ -42,7 +42,7 @@ class Publikasi extends BaseController
         //dd($data);
         return view('dashboard', $data);
     }
-    
+
     public function Ajupublikasi()
     {
         $data = [
@@ -55,14 +55,32 @@ class Publikasi extends BaseController
         return view('pengajuan_publikasi/ajupublikasi', $data);
     }
 
+    // public function Judulpublikasi()
+    // {
+
+    //     $id_jenispublikasi = $this->request->getPost('id_jenispublikasi');
+    //     dd($id_jenispublikasi);
+    //     $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
+    //     echo '<option value="">--Pilih Judul Publikasi--</option>';
+    //     foreach ($judulpublikasi as $key => $jp) {
+    //         echo "<option value=" . $jp['id'] . ">" . $jp['judul_publikasi_ind'] . "</option>";
+    //     }
+
+    //     return view('ajupublikasi', $judulpublikasi);
+    // }
+
     public function Judulpublikasi($id_jenispublikasi)
     {
         $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
-        echo '<option value="">--Pilih Judul Publikasi--</option>';
-        foreach ($judulpublikasi as $key => $jp) {
-            echo "<option value=" . $jp['id'] . ">" . $jp['judul_publikasi_ind'] . "</option>";
+        dd($judulpublikasi);
+        $options = '<option value="">--Pilih Judul Publikasi--</option>';
+        foreach ($judulpublikasi as $jp) {
+            $options .= "<option value='{$jp['id']}'>{$jp['judul_publikasi_ind']}</option>";
         }
+
+        return $this->response->setContentType('application/json')->setBody($options);
     }
+
 
     public function LihatKomentar($id_publikasi)
     {
@@ -116,6 +134,48 @@ class Publikasi extends BaseController
                     'required' => '{field} Wajib Dipilih!!'
                 ]
             ],
+
+    // public function InsertData()
+    // {
+
+
+    //     var_dump($_POST);
+    //     if ($this->validate([
+    //         'id_jenispublikasi' => [
+    //             'label' => 'Jenis Publikasi',
+    //             'rules' => 'required',
+    //             'errors' => [
+    //                 'required' => '{field} Wajib Dipilih!!'
+    //             ]
+    //         ],
+    //         'id_judulpublikasi' => [
+    //             'label' => 'Judul Publikasi',
+    //             'rules' => 'required',
+    //             'errors' => [
+    //                 'required' => '{field} Wajib Dipilih!!'
+    //             ]
+    //         ],
+    //         'id_fungsi' => [
+    //             'label' => 'Fungsi Pengusul',
+    //             'rules' => 'required',
+    //             'errors' => [
+    //                 'required' => '{field} Wajib Dipilih!!'
+    //             ]
+    //         ],
+    //         'nama_penyusun' => [
+    //             'label' => 'Nama Penyusun',
+    //             'rules' => 'required',
+    //             'errors' => [
+    //                 'required' => '{field} Wajib Dipilih!!'
+    //             ]
+    //         ],
+    //         'link_publikasi' => [
+    //             'label' => 'Link Publikasi',
+    //             'rules' => 'required',
+    //             'errors' => [
+    //                 'required' => '{field} Wajib Dipilih!!'
+    //             ]
+    //         ],
 
 
         ])) {
