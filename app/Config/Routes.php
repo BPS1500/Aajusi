@@ -27,6 +27,7 @@ $routes->get('publikasi', 'Publikasi::index');
 $routes->get('Publikasi', 'Publikasi::index');
 $routes->get('Publikasi/ajupublikasi', 'Publikasi::Ajupublikasi');
 $routes->post('Publikasi/Judulpublikasi/(:num)', 'Publikasi::Judulpublikasi/$1');
+$routes->get('Publikasi/LihatKomentar/(:num)', 'Publikasi::LihatKomentar/$1');
 
 
 

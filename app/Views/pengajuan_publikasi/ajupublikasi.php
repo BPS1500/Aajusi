@@ -95,21 +95,17 @@
 
 <script>
     $(document).ready(function() {
-
         $("#id_jenispublikasi").change(function(e) {
             var id_jenispublikasi = $("#id_jenispublikasi").val();
             console.log(id_jenispublikasi);
             $.ajax({
                 type: 'post',
-                url: "<?= base_url('Publikasi/Judulpublikasi') ?>",
-                data: {
-                    id_jenispublikasi: id_jenispublikasi
-                },
+                url: "<?= base_url('Publikasi/Judulpublikasi') ?>/" + id_jenispublikasi,
                 success: function(response) {
                     $("#id_judulpublikasi").html(response);
                 }
-            })
+            });
         });
-
-    })
+    });
+</script>
 <?= $this->endSection() ?>

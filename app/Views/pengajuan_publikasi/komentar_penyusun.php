@@ -1,4 +1,5 @@
 <?= $this->extend('layouts/main_layout') ?>
+<?= $this->section('content') ?>
 
 <div class="col-md-10">
     <div class="card-footer card-comments">
