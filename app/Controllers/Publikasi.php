@@ -13,6 +13,7 @@ class Publikasi extends BaseController
     {
         helper('form');
         $this->ModelPublikasi = new ModelPublikasi;
+        // $this->session = \Config\Services::session();
     }
     public function index()
     {
@@ -76,120 +77,121 @@ class Publikasi extends BaseController
         return view('pengajuan_publikasi/komentar_penyusun', $data);
     }
     
-    // public function InsertData()
-    // {
+    public function InsertData()
+    {
+        var_dump($_POST);
+        if ($this->validate([
+            'id_jenispublikasi' => [
+                'label' => 'Jenis Publikasi',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '{field} Wajib Dipilih!!'
+                ]
+            ],
+            'id_judulpublikasi' => [
+                'label' => 'Judul Publikasi',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '{field} Wajib Dipilih!!'
+                ]
+            ],
+            'id_fungsi' => [
+                'label' => 'Fungsi Pengusul',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '{field} Wajib Dipilih!!'
+                ]
+            ],
+            'nama_penyusun' => [
+                'label' => 'Nama Penyusun',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '{field} Wajib Dipilih!!'
+                ]
+            ],
+            'link_publikasi' => [
+                'label' => 'Link Publikasi',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '{field} Wajib Dipilih!!'
+                ]
+            ],
 
 
-    //     var_dump($_POST);
-    //     if ($this->validate([
-    //         'id_jenispublikasi' => [
-    //             'label' => 'Jenis Publikasi',
-    //             'rules' => 'required',
-    //             'errors' => [
-    //                 'required' => '{field} Wajib Dipilih!!'
-    //             ]
-    //         ],
-    //         'id_judulpublikasi' => [
-    //             'label' => 'Judul Publikasi',
-    //             'rules' => 'required',
-    //             'errors' => [
-    //                 'required' => '{field} Wajib Dipilih!!'
-    //             ]
-    //         ],
-    //         'id_fungsi' => [
-    //             'label' => 'Fungsi Pengusul',
-    //             'rules' => 'required',
-    //             'errors' => [
-    //                 'required' => '{field} Wajib Dipilih!!'
-    //             ]
-    //         ],
-    //         'nama_penyusun' => [
-    //             'label' => 'Nama Penyusun',
-    //             'rules' => 'required',
-    //             'errors' => [
-    //                 'required' => '{field} Wajib Dipilih!!'
-    //             ]
-    //         ],
-    //         'link_publikasi' => [
-    //             'label' => 'Link Publikasi',
-    //             'rules' => 'required',
-    //             'errors' => [
-    //                 'required' => '{field} Wajib Dipilih!!'
-    //             ]
-    //         ],
+        ])) {
+            //Jika Valid
+            $data = [
+                'id_user_upload' => $this->request->getPost('id_user_upload'),
+                'id_jenispublikasi' => $this->request->getPost('id_jenispublikasi'),
+                'id_judulpublikasi' => $this->request->getPost('id_judulpublikasi'),
+                'id_fungsi' => $this->request->getPost('id_fungsi'),
+                'nama_penyusun' => $this->request->getPost('nama_penyusun'),
+                'link_publikasi' => $this->request->getPost('link_publikasi'),
+                'link_spsnrkf' => $this->request->getPost('link_spsnrkf'),
+                'link_spsnres2' => $this->request->getPost('link_spsnres2'),
+                'status' => 1,
+                'flag' => 1,
+                // 'nip_lama' => $this->session->get('nip_lama');
+            ];
+            // dd($data);
+            $this->ModelPublikasi->InsertData($data);
+            session()->setFlashdata('insert', 'Data Berhasil Ditambahkan!!');
+            return redirect()->to(base_url('Publikasi'));
+        } else {
+            //Jika Tidak Valid
+            session()->setFlashdata('errors', \Config\Services::validation()->getErrors());
+            return redirect()->to(base_url('Publikasi/Ajupublikasi'))->withInput('validation', \Config\Services::validation());
+        }
+    }
+
+    public function getLink()
+    {
+        $id = $this->request->getPost('id');
+        $dataLink = $this->ModelPublikasi->getDataLink($id);
+        echo $dataLink[0]['link_publikasi'];
+    }
+
+    public function setLink()
+    {
+        $id = $this->request->getPost('id');
+
+        $dataLink = $this->request->getPost('link');
+
+        $data = [
+            'link_publikasi' => $dataLink,
+            'flag' => 1,
+            'status' => 1,
+        ];
+
+        $this->ModelPublikasi->setDataLink($id, $data);
+        return redirect()->to(base_url('Publikasi'));
+    }
 
 
-    //     ])) {
-    //         //Jika Valid
-    //         $data = [
-    //             'id_user_upload' => $this->request->getPost('id_user_upload'),
-    //             'id_jenispublikasi' => $this->request->getPost('id_jenispublikasi'),
-    //             'id_judulpublikasi' => $this->request->getPost('id_judulpublikasi'),
-    //             'id_fungsi' => $this->request->getPost('id_fungsi'),
-    //             'nama_penyusun' => $this->request->getPost('nama_penyusun'),
-    //             'link_publikasi' => $this->request->getPost('link_publikasi'),
-    //             'link_spsnrkf' => $this->request->getPost('link_spsnrkf'),
-    //             'link_spsnres2' => $this->request->getPost('link_spsnres2'),
-    //         ];
-    //         // dd($data);
-    //         $this->ModelPublikasi->InsertData($data);
-    //         session()->setFlashdata('insert', 'Data Berhasil Ditambahkan!!');
-    //         return redirect()->to(base_url('Publikasi'));
-    //     } else {
-    //         //Jika Tidak Valid
-    //         session()->setFlashdata('errors', \Config\Services::validation()->getErrors());
-    //         return redirect()->to(base_url('Publikasi/Ajupublikasi'))->withInput('validation', \Config\Services::validation());
-    //     }
-    // }
+    public function getDataEdit()
+    {
+        $getData = $this->request->getPost('id');
+        $data = $this->ModelPublikasi->getKomentar($getData);
 
-    // public function getLink()
-    // {
-    //     $id = $this->request->getPost('id');
-    //     $dataLink = $this->ModelPublikasi->getDataLink($id);
-    //     echo $dataLink[0]['link_publikasi'];
-    // }
+        echo json_encode($data);
+    }
 
-    // public function setLink()
-    // {
-    //     $id = $this->request->getPost('id');
+    public function editkomentar()
+    {
 
-    //     $dataLink = $this->request->getPost('link');
-
-    //     $data = [
-    //         'link_publikasi' => $dataLink,
-    //         'flag' => 1,
-    //         'status' => 1,
-    //     ];
-
-    //     $this->ModelPublikasi->setDataLink($id, $data);
-    //     return redirect()->to(base_url('Publikasi'));
-    // }
+        $id = $this->request->getPost('id');
+        $data = [
+            'judul_publikasi_ind' => $this->request->getPost('judul_publikasi_indonesia'),
+            'judul_publikasi_eng' => $this->request->getPost('judul_publikasi_inggris'),
+            'nama_penyusun' => $this->request->getPost('nama_penyusun'),
+            'frekuensi_terbit' => $this->request->getPost('frekuensi_terbit'),
+            'bahasa' => $this->request->getPost('bahasa'),
+            'katalog' => $this->request->getPost('katalog'),
+            'no_issn' => $this->request->getPost('no_issn')
+        ];
 
 
-    // public function getDataEdit()
-    // {
-    //     $getData = $this->request->getPost('id');
-    //     $data = $this->ModelPublikasi->getKomentar($getData);
-
-    //     echo json_encode($data);
-    // }
-
-    // public function editkomentar()
-    // {
-
-    //     $id = $this->request->getPost('id');
-    //     $data = [
-    //         'judul_publikasi_ind' => $this->request->getPost('judul_publikasi_indonesia'),
-    //         'judul_publikasi_eng' => $this->request->getPost('judul_publikasi_inggris'),
-    //         'nama_penyusun' => $this->request->getPost('nama_penyusun'),
-    //         'frekuensi_terbit' => $this->request->getPost('frekuensi_terbit'),
-    //         'bahasa' => $this->request->getPost('bahasa'),
-    //         'katalog' => $this->request->getPost('katalog'),
-    //         'no_issn' => $this->request->getPost('no_issn')
-    //     ];
-
-
-    //     $this->ModelPublikasi->updateKomentar($id, $data);
-    //     return redirect()->to(base_url('MasterPublikasi'));
-    // }
+        $this->ModelPublikasi->updateKomentar($id, $data);
+        return redirect()->to(base_url('MasterPublikasi'));
+    }
 }
