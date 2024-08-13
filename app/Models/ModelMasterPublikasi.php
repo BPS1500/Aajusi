@@ -8,7 +8,7 @@ class ModelMasterPublikasi extends Model
 {
     protected $table = 'tbl_masterpublikasi b';
     protected $useTimestamps = true;
-    protected $allowedFields = ['id', 'id_jenispublikasi', 'jenis_publikasi', 'judul_publikasi_ind', 'judul_publikasi_eng', 'nama_penyusun', 'frekuensi_terbit', 'bahasa', 'no_issn', 'b.bahasa', 'c.frekuensi_terbit'];
+    protected $allowedFields = ['id', 'id_jenispublikasi', 'jenis_publikasi', 'judul_publikasi_ind', 'judul_publikasi_eng', 'nama_penyusun', 'frekuensi_terbit', 'bahasa', 'no_issn', 'b.bahasa', 'c.frekuensi_terbit', 'katalog'];
 
     public function getMasterPublikasi($id = null)
     {

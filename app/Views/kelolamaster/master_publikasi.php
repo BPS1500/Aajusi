@@ -25,7 +25,7 @@
                     <div class="card-header bg-white">
                         <h3 class="card-title">Master Publikasi</h3>
                         <div class="form-group float-right">
-                            <button type="submit" class="btn btn-primary" name="action" value="import">Import</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importModal">Import</button>
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambahModal">Tambah</button>
                         </div>
                     </div>
@@ -38,6 +38,7 @@
                                 <th style="width: 20%;">Judul Publikasi (Inggris)</th>
                                 <th style="width: 10%;">Frekuensi Terbit</th>
                                 <th style="width: 10%;">Bahasa</th>
+                                <th style="width: 10%;">Katalog</th>
                                 <th style="width: 10%;">No ISSN</th>
                                 <th>Aksi</th>
                             </tr>
@@ -51,6 +52,7 @@
                                 <td><em><?= $row['judul_publikasi_eng'] ?></em></td>
                                 <td><?= $row['frekuensi_terbit'] ?></td>
                                 <td><?= $row['bahasa'] ?></td>
+                                <td><?= $row['katalog'] ?></td>
                                 <td><?= $row['no_issn'] ?></td>
                                 <td>
                                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal"
@@ -60,7 +62,8 @@
                                             data-judul_publikasi_eng="<?= $row['judul_publikasi_eng'] ?>"
                                             data-frekuensi_terbit="<?= $row['frekuensi_terbit'] ?>"
                                             data-bahasa="<?= $row['bahasa'] ?>"
-                                            data-no_issn="<?= $row['no_issn'] ?>">Edit</button>
+                                            data-no_issn="<?= $row['no_issn'] ?>"
+                                            data-katalog="<?= $row['katalog'] ?>">Edit</button>
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" data-id="<?= $row['id'] ?>">Hapus</button>
                                 </td>
                             </tr>
@@ -145,6 +148,10 @@
                         <label for="editNoISSN">No ISSN</label>
                         <input type="text" name="no_issn" id="editNoISSN" class="form-control">
                     </div>
+                    <div class="form-group">
+                        <label for="editKatalog">Katalog</label>
+                        <input type="text" name="katalog" id="editKatalog" class="form-control">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -202,6 +209,10 @@
                         <label for="tambahNoISSN">No ISSN</label>
                         <input type="text" name="no_issn" id="tambahNoISSN" class="form-control">
                     </div>
+                    <div class="form-group">
+                        <label for="katalog">Katalog</label>
+                        <input type="text" name="katalog" id="katalog" class="form-control">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -211,6 +222,35 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Import File -->
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importModalLabel">Import File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="importForm" method="post" enctype="multipart/form-data" action="<?= base_url('/masterpublikasi/import') ?>">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <a href="<?= base_url('/assets/data/template/templatemasterpub.xlsx') ?>" class="btn btn-success">Download Template</a>
+                        <div style="margin-top: 10px;"></div>
+                        <!-- <input type="file" name="file" id="file" class="form-control-file" accept=".xlsx" required> -->
+                        <input type="file" name="file_upload" id="file_upload" class="form-control-file" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <script>
 $(document).ready(function() {
@@ -237,6 +277,8 @@ $(document).ready(function() {
         var frekuensi_terbit = button.data('frekuensi_terbit');
         var bahasa = button.data('bahasa');
         var no_issn = button.data('no_issn');
+        var katalog = button.data('katalog');
+
         var modal = $(this);
         modal.find('#editId').val(id);
         modal.find('#editJenisPublikasi').val(id_jenispublikasi);
@@ -245,6 +287,7 @@ $(document).ready(function() {
         modal.find('#editFrekuensiTerbit').val(frekuensi_terbit);
         modal.find('#editBahasa').val(bahasa);
         modal.find('#editNoISSN').val(no_issn);
+        modal.find('#editKatalog').val(katalog);
         modal.find('#editForm').attr('action', '/masterpublikasi/edit/' + id);
     });
 });
