@@ -7,14 +7,11 @@ use CodeIgniter\Model;
 class ModelMasterPublikasi extends Model
 {
     protected $table = 'tbl_masterpublikasi b';
-    protected $useTimeStamps = true;
+    protected $useTimestamps = true;
     protected $allowedFields = ['id', 'id_jenispublikasi', 'jenis_publikasi', 'judul_publikasi_ind', 'judul_publikasi_eng', 'nama_penyusun', 'frekuensi_terbit', 'bahasa', 'no_issn', 'b.bahasa', 'c.frekuensi_terbit'];
-
-
 
     public function getMasterPublikasi($id = null)
     {
-
         $this->join('mst_bahasa a', 'b.bahasa=a.id_bahasa', 'left', false);
         $this->join('mst_frekuensi c', 'b.frekuensi_terbit=c.id_freq', 'left', false);
         if ($id == null) {
@@ -30,6 +27,7 @@ class ModelMasterPublikasi extends Model
             ->orderBy('id', 'DESC')
             ->get()->getResultArray();
     }
+
     public function Add($data)
     {
         $this->db->table('tbl_masterpublikasi')->insert($data);
@@ -37,7 +35,7 @@ class ModelMasterPublikasi extends Model
 
     public function delete_masterpublikasi($id)
     {
-        return $this->db->table('tbl_masterpublikasi')->delete(array('id' => $id));
+        return $this->db->table('tbl_masterpublikasi')->delete(['id' => $id]);
     }
 
     public function getDataForUpdate($id)
@@ -47,7 +45,7 @@ class ModelMasterPublikasi extends Model
 
     public function updateData($id, $data)
     {
-        $this->db->table('tbl_masterpublikasi')->update($data, array('id' => $id));
+        return $this->db->table('tbl_masterpublikasi')->update($data, ['id' => $id]);
     }
 
     public function countARC()

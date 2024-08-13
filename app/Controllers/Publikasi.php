@@ -9,12 +9,14 @@ use PhpParser\Node\Stmt\Label;
 class Publikasi extends BaseController
 {
     protected $ModelPublikasi;
+    
     public function __construct()
     {
         helper('form');
         $this->ModelPublikasi = new ModelPublikasi;
         // $this->session = \Config\Services::session();
     }
+    
     public function index()
     {
         $data = [
@@ -72,15 +74,11 @@ class Publikasi extends BaseController
     public function Judulpublikasi($id_jenispublikasi)
     {
         $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
-        dd($judulpublikasi);
-        $options = '<option value="">--Pilih Judul Publikasi--</option>';
-        foreach ($judulpublikasi as $jp) {
-            $options .= "<option value='{$jp['id']}'>{$jp['judul_publikasi_ind']}</option>";
+        echo '<option value="">--Pilih Judul Publikasi--</option>';
+        foreach ($judulpublikasi as $key => $jp) {
+            echo "<option value=" . $jp['id'] . ">" . $jp['judul_publikasi_ind'] . "</option>";
         }
-
-        return $this->response->setContentType('application/json')->setBody($options);
     }
-
 
     public function LihatKomentar($id_publikasi)
     {
@@ -134,50 +132,6 @@ class Publikasi extends BaseController
                     'required' => '{field} Wajib Dipilih!!'
                 ]
             ],
-
-    // public function InsertData()
-    // {
-
-
-    //     var_dump($_POST);
-    //     if ($this->validate([
-    //         'id_jenispublikasi' => [
-    //             'label' => 'Jenis Publikasi',
-    //             'rules' => 'required',
-    //             'errors' => [
-    //                 'required' => '{field} Wajib Dipilih!!'
-    //             ]
-    //         ],
-    //         'id_judulpublikasi' => [
-    //             'label' => 'Judul Publikasi',
-    //             'rules' => 'required',
-    //             'errors' => [
-    //                 'required' => '{field} Wajib Dipilih!!'
-    //             ]
-    //         ],
-    //         'id_fungsi' => [
-    //             'label' => 'Fungsi Pengusul',
-    //             'rules' => 'required',
-    //             'errors' => [
-    //                 'required' => '{field} Wajib Dipilih!!'
-    //             ]
-    //         ],
-    //         'nama_penyusun' => [
-    //             'label' => 'Nama Penyusun',
-    //             'rules' => 'required',
-    //             'errors' => [
-    //                 'required' => '{field} Wajib Dipilih!!'
-    //             ]
-    //         ],
-    //         'link_publikasi' => [
-    //             'label' => 'Link Publikasi',
-    //             'rules' => 'required',
-    //             'errors' => [
-    //                 'required' => '{field} Wajib Dipilih!!'
-    //             ]
-    //         ],
-
-
         ])) {
             //Jika Valid
             $data = [
@@ -227,7 +181,6 @@ class Publikasi extends BaseController
         return redirect()->to(base_url('Publikasi'));
     }
 
-
     public function getDataEdit()
     {
         $getData = $this->request->getPost('id');
@@ -249,7 +202,6 @@ class Publikasi extends BaseController
             'katalog' => $this->request->getPost('katalog'),
             'no_issn' => $this->request->getPost('no_issn')
         ];
-
 
         $this->ModelPublikasi->updateKomentar($id, $data);
         return redirect()->to(base_url('MasterPublikasi'));

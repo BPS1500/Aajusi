@@ -33,7 +33,6 @@ class ModelPublikasi extends Model
         }
     }
 
-
     public function AllData()
     {
         return $this->db->table('tbl_publikasi')
@@ -61,7 +60,7 @@ class ModelPublikasi extends Model
     {
         return count($this->db->table('tbl_publikasi')
             ->where('id_jenispublikasi', 2)
-            ->get()->getResultArray());
+            -> get()->getResultArray());
     }
 
     public function AllJudulpublikasi($id_jenispublikasi)

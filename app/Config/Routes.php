@@ -41,6 +41,16 @@ $routes->get('/sprp/edit/(:num)', 'SprpController::edit/$1');
 $routes->post('/sprp/update/(:num)', 'SprpController::update/$1');
 $routes->get('/sprp/delete/(:num)', 'SprpController::delete/$1');
 
+// Routes Master Publikasi
+$routes->get('kelola/masterpublikasi', 'MasterPublikasi::index');
+$routes->post('kelola/masterpublikasi/delete/(:num)', 'MasterPublikasi::delete/$1');
+$routes->post('kelola/masterpublikasi/edit/(:num)', 'MasterPublikasi::edit/$1');
+$routes->post('masterpublikasi/tambah', 'MasterPublikasi::tambah');
+$routes->post('masterpublikasi/delete/(:num)', 'MasterPublikasi::delete/$1', ['as' => 'masterpublikasi_delete']);
+
+
+
+
 
 
 // $routes->get('/layanan/form', 'Layanan::form');

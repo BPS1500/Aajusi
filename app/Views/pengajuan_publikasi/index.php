@@ -46,7 +46,7 @@
 
 
                                                             ?></td>
-
+ 
                             <td><?= $value['judul_publikasi_ind'] ?></td>
                             <td style="text-align: center;"><?= $value['nama_fungsi'] ?></td>
                             <td><a class="btn btn-primary" href="<?= $value['link_publikasi'] ?>" target="_blank"><i class="fas fa-book"></i> </a><?php if ($value['link_spsnrkf'] != null) { ?> <a class="btn btn-secondary" href="<?= $value['link_spsnrkf'] ?>" target="_blank"><i class="fas fa-file-signature"></i></a><?php } ?><?php if ($value['link_spsnres2'] != null) { ?> <a class="btn btn-success" href="<?= $value['link_spsnres2'] ?>" target="_blank"><i class="fas fa-file-signature"></i></a><?php } ?></td>
@@ -116,6 +116,16 @@
 
 <!-- END MODAL STATUS -->
 
+<div class="modal fade" id="modal-lg1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit<?= $judul ?></h4>
+                
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     $(document).ready(function() {

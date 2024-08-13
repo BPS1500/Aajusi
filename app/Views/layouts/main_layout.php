@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
 </head>
+</head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -79,7 +80,7 @@
                                     if (isset($menuArray[$menu->id])) {
                                         echo '<li class="nav-item has-treeview ' . $active . '">';
                                         echo '<a href="#" class="nav-link ' . $active . '">';
-                                        echo '<i class="nav-icon fas fa-circle"></i>';
+                                        echo '<i class="nav-icon fas fa-list"></i>'; 
                                         echo '<p>' . $menu->menu_name . '<i class="right fas fa-angle-left"></i></p>';
                                         echo '</a>';
                                         echo '<ul class="nav nav-treeview">';
@@ -97,7 +98,6 @@
                                 }
                             }
                         }
-
                         // Tampilkan menu utama
                         display_menu(NULL, $menuArray, $currentURL);
                         ?>
