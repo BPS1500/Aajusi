@@ -46,7 +46,6 @@ $routes->get('kelola/masterpublikasi', 'MasterPublikasi::index');
 $routes->post('kelola/masterpublikasi/delete/(:num)', 'MasterPublikasi::delete/$1');
 $routes->post('kelola/masterpublikasi/edit/(:num)', 'MasterPublikasi::edit/$1');
 $routes->post('masterpublikasi/tambah', 'MasterPublikasi::tambah');
-$routes->post('masterpublikasi/delete/(:num)', 'MasterPublikasi::delete/$1', ['as' => 'masterpublikasi_delete']);
 $routes->post('masterpublikasi/unggahPublikasi', 'MasterPublikasi::unggahPublikasi');
 
 

@@ -86,7 +86,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="deleteForm" method="post">
+            <form id="deleteForm" method="post" action="<?= base_url('/masterpublikasi/delete') ?>">
                 <input type="hidden" name="id" id="deleteId" value="">
                 <div class="modal-body">
                     Apakah Anda yakin ingin menghapus publikasi ini?
@@ -110,7 +110,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="editForm" method="post">
+            <form id="editForm" method="post" action="<?= base_url('/kelola/masterpublikasi/edit') ?>">
                 <input type="hidden" name="id" id="editId" value="">
                 <div class="modal-body">
                     <div class="form-group">
@@ -233,12 +233,11 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="importForm" method="post" enctype="multipart/form-data" action="<?= base_url('/masterpublikasi/import') ?>">
+            <form id="importForm" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
                         <a href="<?= base_url('/assets/data/template/templatemasterpub.xlsx') ?>" class="btn btn-success">Download Template</a>
                         <div style="margin-top: 10px;"></div>
-                        <!-- <input type="file" name="file" id="file" class="form-control-file" accept=".xlsx" required> -->
                         <input type="file" name="file_upload" id="file_upload" class="form-control-file" required>
                     </div>
                 </div>
@@ -254,21 +253,16 @@
 
 <script>
 $(document).ready(function() {
-    $('#usersTable').DataTable({
-        // Your DataTable configurations
-    });
+    $('#usersTable').DataTable({});
 
-    // Fill delete modal with data
+    // Delete script
     $('#deleteModal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);
         var id = button.data('id');
-        var modal = $(this);
-        modal.find('#deleteId').val(id);
-        modal.find('#deleteForm').attr('action', '/masterpublikasi/delete/' + id);
+        $('#deleteForm').attr('action', '<?= base_url('/kelola/masterpublikasi/delete/') ?>' + id);
     });
 
-    // Fill edit modal with data
-    $('#editModal').on('show.bs.modal', function(event) {
+    $('#editModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var id = button.data('id');
         var id_jenispublikasi = button.data('id_jenispublikasi');
@@ -278,7 +272,7 @@ $(document).ready(function() {
         var bahasa = button.data('bahasa');
         var no_issn = button.data('no_issn');
         var katalog = button.data('katalog');
-
+        
         var modal = $(this);
         modal.find('#editId').val(id);
         modal.find('#editJenisPublikasi').val(id_jenispublikasi);
@@ -288,8 +282,10 @@ $(document).ready(function() {
         modal.find('#editBahasa').val(bahasa);
         modal.find('#editNoISSN').val(no_issn);
         modal.find('#editKatalog').val(katalog);
-        modal.find('#editForm').attr('action', '/masterpublikasi/edit/' + id);
+        modal.find('#editForm').attr('action', '<?= base_url('kelola/masterpublikasi/edit/') ?>' + id);
     });
+
+
 });
 </script>
 
