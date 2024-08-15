@@ -47,6 +47,7 @@ $routes->post('kelola/masterpublikasi/delete/(:num)', 'MasterPublikasi::delete/$
 $routes->post('kelola/masterpublikasi/edit/(:num)', 'MasterPublikasi::edit/$1');
 $routes->post('masterpublikasi/tambah', 'MasterPublikasi::tambah');
 $routes->post('masterpublikasi/unggahPublikasi', 'MasterPublikasi::unggahPublikasi');
+$routes->post('kelola/masterpublikasi/import', 'MasterPublikasi::unggahPublikasi');
 
 
 

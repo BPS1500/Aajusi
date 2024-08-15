@@ -103,9 +103,8 @@ class MasterPublikasi extends BaseController
                 $this->saveToMasterPublikasi($rowData);
             }
         }
-    
-        // return redirect()->to('/masterpublikasi')->with('message', 'File berhasil diunggah.');
-        return redirect()->to(previous_url())->with('message', 'File berhasil diunggah.');
+        return redirect()->to(base_url('kelola/masterpublikasi'))->with('message', 'File berhasil diunggah.');
+        // return $this->response->setJSON(['success' => true, 'message' => 'File berhasil diunggah.']);
     }
     
     private function saveToMasterPublikasi($data)

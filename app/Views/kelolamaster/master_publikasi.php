@@ -233,7 +233,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="importForm" method="post" enctype="multipart/form-data">
+            <form id="importForm" method="post" action="<?= base_url('kelola/masterpublikasi/import') ?>" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
                         <a href="<?= base_url('/assets/data/template/templatemasterpub.xlsx') ?>" class="btn btn-success">Download Template</a>
@@ -262,6 +262,7 @@ $(document).ready(function() {
         $('#deleteForm').attr('action', '<?= base_url('/kelola/masterpublikasi/delete/') ?>' + id);
     });
 
+    // Edit script
     $('#editModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var id = button.data('id');
@@ -285,6 +286,27 @@ $(document).ready(function() {
         modal.find('#editForm').attr('action', '<?= base_url('kelola/masterpublikasi/edit/') ?>' + id);
     });
 
+    // Import script
+    $('#importForm').submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            success: function(data) {
+                $('#importModal').modal('hide');
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                alert('An error occurred while importing the file. Please try again.');
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
 
 });
 </script>
