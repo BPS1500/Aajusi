@@ -172,4 +172,5 @@ class ModelPublikasi extends Model
         $data= array('masterarc'=>$masterArc,'masternonarc'=>$masterNonArc,'arcstatus'=>$arcstatus,'nonarcstatus'=>$nonarcstatus,'arc'=>$arc,'nonarc'=>$nonArc);
         return $data;
     }
+    
 }

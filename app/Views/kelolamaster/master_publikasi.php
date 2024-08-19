@@ -294,20 +294,42 @@ $(document).ready(function() {
             url: $(this).attr('action'),
             type: 'POST',
             data: formData,
-            success: function(data) {
+            success: function(response) {
                 $('#importModal').modal('hide');
-                location.reload();
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sukses!',
+                        text: response.message,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Terjadi kesalahan saat mengimpor file.',
+                        confirmButtonText: 'OK'
+                    });
+                }
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText);
-                alert('An error occurred while importing the file. Please try again.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Terjadi kesalahan saat mengimpor file. Silakan coba lagi.',
+                    confirmButtonText: 'OK'
+                });
             },
             cache: false,
             contentType: false,
             processData: false
         });
     });
-
 });
 </script>
 

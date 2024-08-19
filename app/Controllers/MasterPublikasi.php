@@ -43,7 +43,7 @@ class MasterPublikasi extends BaseController
             'katalog' => $this->request->getPost('katalog')
         ];
         $model->Add($data);
-
+        
         return redirect()->to(base_url('kelola/masterpublikasi'));
     }
 
@@ -103,8 +103,8 @@ class MasterPublikasi extends BaseController
                 $this->saveToMasterPublikasi($rowData);
             }
         }
-        return redirect()->to(base_url('kelola/masterpublikasi'))->with('message', 'File berhasil diunggah.');
-        // return $this->response->setJSON(['success' => true, 'message' => 'File berhasil diunggah.']);
+        return $this->response->setJSON(['success' => true, 'message' => 'File berhasil diunggah.']);
+        // return redirect()->to(base_url('kelola/masterpublikasi'))->with('message', 'File berhasil diunggah.');
     }
     
     private function saveToMasterPublikasi($data)

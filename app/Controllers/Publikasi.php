@@ -206,4 +206,23 @@ class Publikasi extends BaseController
         $this->ModelPublikasi->updateKomentar($id, $data);
         return redirect()->to(base_url('MasterPublikasi'));
     }
+
+    public function AddKomentar()
+    {
+        // Get the full name from session data
+        $pemeriksa = session()->get('full_name');
+
+        $data = [
+            'catatan' => $this->request->getPost('catatan'),
+            'id_publikasi' => $this->request->getPost('id_publikasi'),
+            'pemeriksa' => $pemeriksa,
+            'selesai' => 0, // 0 sebagai komentar baru
+            'tgl_komen_admin' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+    
+        $this->ModelPublikasi->addCatatanPemeriksa($data);
+        return redirect()->to(base_url('Publikasi/LihatKomentar/' . $data['id_publikasi']))->with('success', 'Komentar berhasil ditambahkan');
+    }
 }

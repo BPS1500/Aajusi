@@ -49,7 +49,8 @@ $routes->post('masterpublikasi/tambah', 'MasterPublikasi::tambah');
 $routes->post('masterpublikasi/unggahPublikasi', 'MasterPublikasi::unggahPublikasi');
 $routes->post('kelola/masterpublikasi/import', 'MasterPublikasi::unggahPublikasi');
 
-
+// Routes Komentar
+$routes->post('publikasi/addkomentar', 'Publikasi::AddKomentar');
 
 
 
