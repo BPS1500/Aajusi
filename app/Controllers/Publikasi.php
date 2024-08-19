@@ -189,22 +189,41 @@ class Publikasi extends BaseController
         echo json_encode($data);
     }
 
-    public function editkomentar()
+    // public function editkomentar()
+    // {
+
+    //     $id = $this->request->getPost('id');
+    //     $data = [
+    //         'judul_publikasi_ind' => $this->request->getPost('judul_publikasi_indonesia'),
+    //         'judul_publikasi_eng' => $this->request->getPost('judul_publikasi_inggris'),
+    //         'nama_penyusun' => $this->request->getPost('nama_penyusun'),
+    //         'frekuensi_terbit' => $this->request->getPost('frekuensi_terbit'),
+    //         'bahasa' => $this->request->getPost('bahasa'),
+    //         'katalog' => $this->request->getPost('katalog'),
+    //         'no_issn' => $this->request->getPost('no_issn')
+    //     ];
+
+    //     $this->ModelPublikasi->updateKomentar($id, $data);
+    //     return redirect()->to(base_url('MasterPublikasi'));
+    // }
+
+    public function editKomentar()
     {
-
-        $id = $this->request->getPost('id');
+        $id_komentar = $this->request->getPost('id_komentar');
+        $catatan = $this->request->getPost('catatan');
+        
         $data = [
-            'judul_publikasi_ind' => $this->request->getPost('judul_publikasi_indonesia'),
-            'judul_publikasi_eng' => $this->request->getPost('judul_publikasi_inggris'),
-            'nama_penyusun' => $this->request->getPost('nama_penyusun'),
-            'frekuensi_terbit' => $this->request->getPost('frekuensi_terbit'),
-            'bahasa' => $this->request->getPost('bahasa'),
-            'katalog' => $this->request->getPost('katalog'),
-            'no_issn' => $this->request->getPost('no_issn')
+            'catatan' => $catatan,
+            'updated_at' => date('Y-m-d H:i:s')
         ];
-
-        $this->ModelPublikasi->updateKomentar($id, $data);
-        return redirect()->to(base_url('MasterPublikasi'));
+        
+        $result = $this->ModelPublikasi->updateKomentar($id_komentar, $data);
+        
+        if ($result) {
+            return $this->response->setJSON(['success' => true]);
+        } else {
+            return $this->response->setJSON(['success' => false]);
+        }
     }
 
     public function AddKomentar()
@@ -247,6 +266,4 @@ class Publikasi extends BaseController
         
         return redirect()->to('Publikasi');
     }
-
-
 }

@@ -43,29 +43,27 @@
                                                             } else {
                                                                 echo "NON ARC";
                                                             }
-
-
                                                             ?></td>
  
                             <td><?= $value['judul_publikasi_ind'] ?></td>
                             <td style="text-align: center;"><?= $value['nama_fungsi'] ?></td>
-                            <td><a class="btn btn-primary" href="<?= $value['link_publikasi'] ?>" target="_blank"><i class="fas fa-book"></i> </a><?php if ($value['link_spsnrkf'] != null) { ?> <a class="btn btn-secondary" href="<?= $value['link_spsnrkf'] ?>" target="_blank"><i class="fas fa-file-signature"></i></a><?php } ?><?php if ($value['link_spsnres2'] != null) { ?> <a class="btn btn-success" href="<?= $value['link_spsnres2'] ?>" target="_blank"><i class="fas fa-file-signature"></i></a><?php } ?></td>
+                            <td><a class="btn btn-primary" href="<?= $value['link_publikasi'] ?>" target="_blank"><i class="fas fa-book"></i></a><?php if ($value['link_spsnrkf'] != null) { ?> <a class="btn btn-secondary" href="<?= $value['link_spsnrkf'] ?>" target="_blank"><i class="fas fa-file-signature"></i></a><?php } ?><?php if ($value['link_spsnres2'] != null) { ?> <a class="btn btn-success" href="<?= $value['link_spsnres2'] ?>" target="_blank"><i class="fas fa-file-signature"></i></a><?php } ?></td>
                             <td class="<?= $value['bgcolor']; ?>"><?= $value['status_review']; ?></td>
 
-
                             <td style="text-align: center;" align=center>
-
-
-                                <a href="<?= base_url('Publikasi/LihatKomentar') ?>/<?= $value['id_publikasi'] ?>" class="btn btn-primary btn-sm ubah" data-data=<?= $value['id_publikasi'] ?>>
+                                <a href="<?= base_url('Publikasi/LihatKomentar') ?>/<?= $value['id_publikasi'] ?>" class="btn btn-primary btn-sm ubah" data-data="<?= $value['id_publikasi'] ?>"
+                                   data-toggle="tooltip" data-placement="top" title="Lihat Komentar">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <?php if (session()->get('id_user') == $value['id_user_upload'] && $value['flag'] != 3) { ?>
-                                    <button type="button" class="btn btn-warning btn-sm btn-edit" data-id=<?= $value['id_publikasi'] ?> data-toggle="modal" data-target="#modal-sm5">
+                                    <button type="button" class="btn btn-warning btn-sm btn-edit" data-id="<?= $value['id_publikasi'] ?>" data-toggle="modal" data-target="#modal-sm5"
+                                            data-toggle="tooltip" data-placement="top" title="Update Link">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 <?php } ?>
                                 <!-- Button Update Status -->
-                                <button type="button" class="btn btn-info btn-sm btn-status" data-id="<?= $value['id_publikasi'] ?>" data-toggle="modal" data-target="#statusModal">
+                                <button type="button" class="btn btn-info btn-sm btn-status" data-id="<?= $value['id_publikasi'] ?>" data-toggle="modal" data-target="#statusModal"
+                                        data-toggle="tooltip" data-placement="top" title="Status Publikasi">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </td>
@@ -104,7 +102,6 @@
     </div>
 </div>
 
-
 <!-- MODAL STATUS -->
 <div class="modal fade" id="modal-sm5">
     <div class="modal-dialog modal-sm">
@@ -120,7 +117,6 @@
                 <div class="modal-body">
                     <!-- btn Approved -->
                     <div class="container d-flex">
-                        <!-- <form> -->
                         <input type="hidden" id="id_hidden" name="id">
                         <textarea name="link" id="inputLink" cols="30" rows="10"></textarea>
                     </div>
@@ -135,14 +131,12 @@
 </div>
 </div>
 
-
 <script>
     $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
 
         $('.btn-edit').on('click', function() {
             const id_publikasi = $(this).data('id');
-
-            console.log(id_publikasi);
             $('#id_hidden').val(id_publikasi);
 
             // ajax :
@@ -152,7 +146,6 @@
                     id: id_publikasi
                 },
                 method: 'post',
-
                 success: function(data) {
                     $('#inputLink').val(data);
                 }
@@ -177,6 +170,6 @@
                 }
             });
         });
-    })
+    });
 </script>
 <?= $this->endSection() ?>
