@@ -52,6 +52,10 @@ $routes->post('kelola/masterpublikasi/import', 'MasterPublikasi::unggahPublikasi
 // Routes Komentar
 $routes->post('publikasi/addkomentar', 'Publikasi::AddKomentar');
 
+$routes->post('Publikasi/getStatusOptions', 'Publikasi::getStatusOptions');
+$routes->post('Publikasi/updateStatus', 'Publikasi::updateStatus');
+
+
 
 
 

@@ -64,22 +64,48 @@
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 <?php } ?>
-
+                                <!-- Button Update Status -->
+                                <button type="button" class="btn btn-info btn-sm btn-status" data-id="<?= $value['id_publikasi'] ?>" data-toggle="modal" data-target="#statusModal">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
                             </td>
                         </tr>
                     <?php  } ?>
                 </tbody>
             </table>
         </div>
-        <!-- /.card-body -->
-
     </div>
-    <!-- /.card -->
+</div>
+
+<!-- MODAL UPDATE STATUS -->
+<div class="modal fade" id="statusModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Perbarui Status Publikasi</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="statusForm" method="post" action="<?= base_url('Publikasi/updateStatus') ?>">
+                    <input type="hidden" id="id_publikasi" name="id_publikasi">
+                    <div class="form-group">
+                        <label for="status_review">Pilih Status:</label>
+                        <select class="form-control" id="status_review" name="status_review"></select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary" form="statusForm">Simpan</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <!-- MODAL STATUS -->
-
 <div class="modal fade" id="modal-sm5">
     <div class="modal-dialog modal-sm">
         <?php echo form_open('Publikasi/setLink') ?>
@@ -92,7 +118,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
                     <!-- btn Approved -->
                     <div class="container d-flex">
                         <!-- <form> -->
@@ -100,7 +125,6 @@
                         <textarea name="link" id="inputLink" cols="30" rows="10"></textarea>
                     </div>
                 </div>
-
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary simpan">Simpan</button>
@@ -108,24 +132,9 @@
         </form>
         <?php echo form_close() ?>
     </div>
-    <!-- /.modal-content -->
 </div>
-<!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
 
-<!-- END MODAL STATUS -->
-
-<div class="modal fade" id="modal-lg1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Edit<?= $judul ?></h4>
-                
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     $(document).ready(function() {
@@ -147,11 +156,27 @@
                 success: function(data) {
                     $('#inputLink').val(data);
                 }
-
             });
-
         });
 
+        // Update Status Button
+        $('.btn-status').on('click', function() {
+            const id_publikasi = $(this).data('id');
+            $('#id_publikasi').val(id_publikasi);
+
+            $.ajax({
+                url: '<?= base_url("Publikasi/getStatusOptions") ?>',
+                method: 'POST',
+                dataType: 'json',
+                success: function(data) {
+                    let options = '';
+                    data.forEach(function(item) {
+                        options += `<option value="${item.id}">${item.status_review}</option>`;
+                    });
+                    $('#status_review').html(options);
+                }
+            });
+        });
     })
 </script>
 <?= $this->endSection() ?>

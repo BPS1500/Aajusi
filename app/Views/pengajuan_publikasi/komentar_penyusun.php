@@ -4,19 +4,21 @@
 <div class="col-md-10">
     <!-- New Comment Form -->
     <div class="card mb-4">
-        <div class="card-header">
-            <h5>Tambah Komentar Baru</h5>
-        </div>
         <div class="card-body">
-            <form action="<?= base_url('publikasi/addkomentar') ?>" method="post">
-                <?= csrf_field() ?>
-                <input type="hidden" name="id_publikasi" value="<?= $id_publikasi ?>">
-                <div class="form-group">
-                    <label for="new_comment">Komentar:</label>
-                    <textarea class="form-control" id="new_comment" name="catatan" rows="3" required></textarea>
+            <div id="newCommentFormContainer">
+                <button class="btn btn-outline-primary btn-block" type="button" data-toggle="collapse" data-target="#newCommentForm" aria-expanded="false" aria-controls="newCommentForm"> Tambah Komentar </button>
+                <div class="collapse" id="newCommentForm">
+                    <form action="<?= base_url('publikasi/addkomentar') ?>" method="post" class="mt-3">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="id_publikasi" value="<?= $id_publikasi ?>">
+                        <div class="form-group">
+                            <label for="new_comment">Komentar</label>
+                            <textarea class="form-control" id="new_comment" name="catatan" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Kirim Komentar</button>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-primary">Kirim Komentar</button>
-            </form>
+            </div>
         </div>
 
     <div class="card-footer card-comments">
@@ -51,6 +53,6 @@
         </div>
     </div>
     <!-- /.card -->
-
+    </div>
 </div>
 <?= $this->endSection() ?>

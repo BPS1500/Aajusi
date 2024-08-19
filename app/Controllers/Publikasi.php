@@ -209,7 +209,6 @@ class Publikasi extends BaseController
 
     public function AddKomentar()
     {
-        // Get the full name from session data
         $pemeriksa = session()->get('full_name');
 
         $data = [
@@ -225,4 +224,29 @@ class Publikasi extends BaseController
         $this->ModelPublikasi->addCatatanPemeriksa($data);
         return redirect()->to(base_url('Publikasi/LihatKomentar/' . $data['id_publikasi']))->with('success', 'Komentar berhasil ditambahkan');
     }
+
+    public function getStatusOptions()
+    {
+        $model = new \App\Models\ModelPublikasi();
+        $statusOptions = $model->getMstStatusReview();
+        
+        echo json_encode($statusOptions);
+    }
+
+    public function updateStatus()
+    {
+        $id_publikasi = $this->request->getPost('id_publikasi');
+        $status_review = $this->request->getPost('status_review');
+        
+        $data = [
+            'flag' => $status_review
+        ];
+        
+        $model = new \App\Models\ModelPublikasi();
+        $model->updateStatus($id_publikasi, $data);
+        
+        return redirect()->to('Publikasi');
+    }
+
+
 }
