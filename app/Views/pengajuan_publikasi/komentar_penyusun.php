@@ -56,6 +56,7 @@
             <?php endforeach; ?>
         </div>
     </div>
+    </div>
 </div>
 
 <!-- Modal Edit Komentar-->
