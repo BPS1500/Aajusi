@@ -266,4 +266,17 @@ class Publikasi extends BaseController
         
         return redirect()->to('Publikasi');
     }
+
+    public function deleteKomentar($id_komentar)
+    {
+        if (session()->get('role') == '1') {
+            $this->ModelPublikasi->deleteKomentar($id_komentar);
+            session()->setFlashdata('success', 'Comment deleted successfully.');
+        } else {
+            session()->setFlashdata('error', 'You do not have permission to delete this comment.');
+        }
+    
+        return redirect()->back();
+    }    
+
 }

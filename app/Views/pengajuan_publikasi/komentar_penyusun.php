@@ -39,9 +39,15 @@
                                 <?php else : ?>
                                     <a href="#" class="btn btn-success btn-sm">Sesuai</a>
                                 <?php endif; ?>
-
+                                
                                 <?php if ($value['pemeriksa'] == session()->get('full_name')) : ?>
                                     <button class="btn btn-sm btn-primary edit-comment ml-2" data-id="<?= $value['id_komentar']; ?>" data-comment="<?= htmlspecialchars($value['catatan']); ?>">Edit</button>
+                                    <?php if (session()->get('role') == '1') : ?>
+                                        <form action="<?= base_url('publikasi/deletekomentar/' . $value['id_komentar']) ?>" method="post" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                            <?= csrf_field() ?>
+                                            <button type="submit" class="btn btn-sm btn-danger ml-2">Delete</button>
+                                        </form>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -115,6 +121,27 @@ $(document).ready(function() {
                 console.error(error);
             }
         });
+    });
+
+    // Handle Delete Comment
+    $('.delete-comment').click(function() {
+        var id = $(this).data('id');
+        if (confirm('Are you sure you want to delete this comment?')) {
+            $.ajax({
+                url: '<?= base_url('publikasi/deletekomentar') ?>',
+                type: 'POST',
+                data: {
+                    id_komentar: id,
+                    <?= csrf_token() ?>: '<?= csrf_hash() ?>'
+                },
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
     });
 });
 </script>

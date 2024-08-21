@@ -177,5 +177,10 @@ class ModelPublikasi extends Model
         $data= array('masterarc'=>$masterArc,'masternonarc'=>$masterNonArc,'arcstatus'=>$arcstatus,'nonarcstatus'=>$nonarcstatus,'arc'=>$arc,'nonarc'=>$nonArc);
         return $data;
     }
+
+    public function deleteKomentar($id_komentar)
+    {
+        $this->db->table('tbl_komentar')->delete(['id_komentar' => $id_komentar]);
+    }
     
 }
