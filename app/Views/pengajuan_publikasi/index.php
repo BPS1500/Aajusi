@@ -53,7 +53,7 @@
                             <td style="text-align: center;" align=center>
                                 <a href="<?= base_url('Publikasi/LihatKomentar') ?>/<?= $value['id_publikasi'] ?>" class="btn btn-primary btn-sm ubah" data-data="<?= $value['id_publikasi'] ?>"
                                    data-toggle="tooltip" data-placement="top" title="Lihat Komentar">
-                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-comment"></i>
                                 </a>
                                 <?php if (session()->get('id_user') == $value['id_user_upload'] && $value['flag'] != 3) { ?>
                                     <button type="button" class="btn btn-warning btn-sm btn-edit" data-id="<?= $value['id_publikasi'] ?>" data-toggle="modal" data-target="#modal-sm5"

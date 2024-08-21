@@ -56,6 +56,7 @@ $routes->post('Publikasi/getStatusOptions', 'Publikasi::getStatusOptions');
 $routes->post('Publikasi/updateStatus', 'Publikasi::updateStatus');
 $routes->post('publikasi/editkomentar', 'Publikasi::editKomentar');
 $routes->post('publikasi/deletekomentar/(:num)', 'Publikasi::deleteKomentar/$1');
+$routes->post('publikasi/updateStatus', 'Publikasi::updateStatus');
 
 
 

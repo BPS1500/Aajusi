@@ -189,24 +189,6 @@ class Publikasi extends BaseController
         echo json_encode($data);
     }
 
-    // public function editkomentar()
-    // {
-
-    //     $id = $this->request->getPost('id');
-    //     $data = [
-    //         'judul_publikasi_ind' => $this->request->getPost('judul_publikasi_indonesia'),
-    //         'judul_publikasi_eng' => $this->request->getPost('judul_publikasi_inggris'),
-    //         'nama_penyusun' => $this->request->getPost('nama_penyusun'),
-    //         'frekuensi_terbit' => $this->request->getPost('frekuensi_terbit'),
-    //         'bahasa' => $this->request->getPost('bahasa'),
-    //         'katalog' => $this->request->getPost('katalog'),
-    //         'no_issn' => $this->request->getPost('no_issn')
-    //     ];
-
-    //     $this->ModelPublikasi->updateKomentar($id, $data);
-    //     return redirect()->to(base_url('MasterPublikasi'));
-    // }
-
     public function editKomentar()
     {
         $id_komentar = $this->request->getPost('id_komentar');
@@ -254,18 +236,23 @@ class Publikasi extends BaseController
 
     public function updateStatus()
     {
-        $id_publikasi = $this->request->getPost('id_publikasi');
-        $status_review = $this->request->getPost('status_review');
+        $id_komentar = $this->request->getPost('id_komentar');
+        $selesai = $this->request->getPost('selesai');
         
         $data = [
-            'flag' => $status_review
+            'selesai' => $selesai,
+            'updated_at' => date('Y-m-d H:i:s')
         ];
         
-        $model = new \App\Models\ModelPublikasi();
-        $model->updateStatus($id_publikasi, $data);
+        $result = $this->ModelPublikasi->updateKomentar($id_komentar, $data);
         
-        return redirect()->to('Publikasi');
+        if ($result) {
+            return $this->response->setJSON(['success' => true]);
+        } else {
+            return $this->response->setJSON(['success' => false]);
+        }
     }
+    
 
     public function deleteKomentar($id_komentar)
     {

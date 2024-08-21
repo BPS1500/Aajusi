@@ -109,10 +109,11 @@ class ModelPublikasi extends Model
     //     return $this->db->table('tbl_komentar')->update($data, array('id_komentar' => $id));
     // }
     
-    public function updateKomentar($id, $data)
+    public function updateKomentar($id_komentar, $data)
     {
-        return $this->db->table('tbl_komentar')->update($data, ['id_komentar' => $id]);
+        return $this->db->table('tbl_komentar')->where('id_komentar', $id_komentar)->update($data);
     }
+    
 
     public function updateStatus($id, $data)
     {
