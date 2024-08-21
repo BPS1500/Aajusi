@@ -41,7 +41,9 @@
                                 <?php endif; ?>
                                 
                                 <?php if ($value['pemeriksa'] == session()->get('full_name')) : ?>
-                                    <button class="btn btn-sm btn-primary edit-comment ml-2" data-id="<?= $value['id_komentar']; ?>" data-comment="<?= htmlspecialchars($value['catatan']); ?>">Edit</button>
+                                    <?php if (in_array(session()->get('role'), [1, 3])) : ?>
+                                        <button class="btn btn-sm btn-primary edit-comment ml-2" data-id="<?= $value['id_komentar']; ?>" data-comment="<?= htmlspecialchars($value['catatan']); ?>">Edit</button>
+                                    <?php endif; ?>
                                     <?php if (session()->get('role') == '1') : ?>
                                         <form action="<?= base_url('publikasi/deletekomentar/' . $value['id_komentar']) ?>" method="post" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this comment?');">
                                             <?= csrf_field() ?>
@@ -49,6 +51,7 @@
                                         </form>
                                     <?php endif; ?>
                                 <?php endif; ?>
+                                
                             </div>
                         </div>
                     </div>
