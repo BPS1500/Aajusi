@@ -7,7 +7,7 @@
             <div class="col-md-10">
                 <h3 class="card-title"><?= $judul ?></h3>
             </div>
-            <a href="<?= base_url('Publikasi/ajupublikasi') ?>" class="btn btn-primary btn-sm"><i class="fas fa-plus"> Ajukan Publikasi </i></a>
+            <a href="<?= base_url('Publikasi/ajupublikasi') ?>" class="btn btn-primary btn-sm"> Ajukan Publikasi </i></a>
         </div>
 
         <!-- /.card-header -->

@@ -143,13 +143,13 @@ class Publikasi extends BaseController
                 'link_publikasi' => $this->request->getPost('link_publikasi'),
                 'link_spsnrkf' => $this->request->getPost('link_spsnrkf'),
                 'link_spsnres2' => $this->request->getPost('link_spsnres2'),
-                'status' => 1,
-                'flag' => 1,
+                // 'status' => 5,
+                'flag' => 5,
                 // 'nip_lama' => $this->session->get('nip_lama');
             ];
             // dd($data);
             $this->ModelPublikasi->InsertData($data);
-            session()->setFlashdata('insert', 'Data Berhasil Ditambahkan!!');
+            session()->setFlashdata('insert', 'Data Berhasil Ditambahkan!');
             return redirect()->to(base_url('Publikasi'));
         } else {
             //Jika Tidak Valid
