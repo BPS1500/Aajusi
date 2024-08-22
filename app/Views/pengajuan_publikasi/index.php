@@ -36,7 +36,7 @@
                     <?php $no = 1;
                     foreach ($Publikasi as $key => $value) { ?>
 
-                        <tr>
+                        <tr data-id="<?= $value['id_publikasi'] ?>">
                             <td style="text-align: center;"><?= $no++  ?>.</td>
                             <td style="text-align: center;"><?php if ($value['id_jenispublikasi'] == 1) {
                                                                 echo "ARC";
@@ -48,7 +48,7 @@
                             <td><?= $value['judul_publikasi_ind'] ?></td>
                             <td style="text-align: center;"><?= $value['nama_fungsi'] ?></td>
                             <td><a class="btn btn-primary" href="<?= $value['link_publikasi'] ?>" target="_blank"><i class="fas fa-book"></i></a><?php if ($value['link_spsnrkf'] != null) { ?> <a class="btn btn-secondary" href="<?= $value['link_spsnrkf'] ?>" target="_blank"><i class="fas fa-file-signature"></i></a><?php } ?><?php if ($value['link_spsnres2'] != null) { ?> <a class="btn btn-success" href="<?= $value['link_spsnres2'] ?>" target="_blank"><i class="fas fa-file-signature"></i></a><?php } ?></td>
-                            <td class="<?= $value['bgcolor']; ?>"><?= $value['status_review']; ?></td>
+                            <td class="status <?= $value['bgcolor']; ?>"><?= $value['status_review']; ?></td>
 
                             <td style="text-align: center;" align=center>
                                 <a href="<?= base_url('Publikasi/LihatKomentar') ?>/<?= $value['id_publikasi'] ?>" class="btn btn-primary btn-sm ubah" data-data="<?= $value['id_publikasi'] ?>"
@@ -188,7 +188,7 @@
                 }
             });
         });
-        
+
         $('[data-toggle="tooltip"]').tooltip();
 
         $('.btn-edit').on('click', function() {
@@ -223,6 +223,32 @@
                         options += `<option value="${item.id}">${item.status_review}</option>`;
                     });
                     $('#status_review').html(options);
+                }
+            });
+        });
+
+        // Handle form submission
+        $('#statusForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            $.ajax({
+                url: $(this).attr('action'),
+                method: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if(response.success) {
+                        // Close the modal
+                        $('#statusModal').modal('hide');
+                        
+                        // Refresh the page to update the table
+                        location.reload();
+                    } else {
+                        alert('Gagal memperbarui status');
+                    }
+                },
+                error: function() {
+                    alert('Terjadi kesalahan');
                 }
             });
         });
