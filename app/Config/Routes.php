@@ -66,6 +66,7 @@ $routes->post('Publikasi/deletePublikasi/(:num)', 'Publikasi::deletePublikasi/$1
 
 
 
+
 // $routes->get('/layanan/form', 'Layanan::form');
 // $routes->get('/layanan/tabel', 'Layanan::tabel');
 // $routes->post('/layanan/submit', 'Layanan::submit');

@@ -57,20 +57,6 @@ class Publikasi extends BaseController
         return view('pengajuan_publikasi/ajupublikasi', $data);
     }
 
-    // public function Judulpublikasi()
-    // {
-
-    //     $id_jenispublikasi = $this->request->getPost('id_jenispublikasi');
-    //     dd($id_jenispublikasi);
-    //     $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
-    //     echo '<option value="">--Pilih Judul Publikasi--</option>';
-    //     foreach ($judulpublikasi as $key => $jp) {
-    //         echo "<option value=" . $jp['id'] . ">" . $jp['judul_publikasi_ind'] . "</option>";
-    //     }
-
-    //     return view('ajupublikasi', $judulpublikasi);
-    // }
-
     public function Judulpublikasi($id_jenispublikasi)
     {
         $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
@@ -95,7 +81,6 @@ class Publikasi extends BaseController
     
     public function InsertData()
     {
-        var_dump($_POST);
         if ($this->validate([
             'id_jenispublikasi' => [
                 'label' => 'Jenis Publikasi',
@@ -143,11 +128,9 @@ class Publikasi extends BaseController
                 'link_publikasi' => $this->request->getPost('link_publikasi'),
                 'link_spsnrkf' => $this->request->getPost('link_spsnrkf'),
                 'link_spsnres2' => $this->request->getPost('link_spsnres2'),
-                // 'status' => 5,
+                'nip_lama' => $this->request->getPost('nip_lama'),  // Save nip_lama
                 'flag' => 5,
-                // 'nip_lama' => $this->session->get('nip_lama');
             ];
-            // dd($data);
             $this->ModelPublikasi->InsertData($data);
             session()->setFlashdata('insert', 'Data Berhasil Ditambahkan!');
             return redirect()->to(base_url('Publikasi'));
@@ -157,6 +140,7 @@ class Publikasi extends BaseController
             return redirect()->to(base_url('Publikasi/Ajupublikasi'))->withInput('validation', \Config\Services::validation());
         }
     }
+
 
     public function getLink()
     {
