@@ -188,5 +188,22 @@ class ModelPublikasi extends Model
     {
         return $this->db->table('tbl_publikasi')->delete(['id_publikasi' => $id_publikasi]);
     }
+
+    public function updateLink($id, $columnName, $newLink)
+    {
+        try {
+            $result = $this->db->table('tbl_publikasi')
+                ->where('id_publikasi', $id)
+                ->update([$columnName => $newLink]);
     
+            if ($result === false) {
+                log_message('error', 'Database error in updateLink: ' . $this->db->error()['message']);
+            }
+    
+            return $result;
+        } catch (\Exception $e) {
+            log_message('error', 'Exception in updateLink: ' . $e->getMessage());
+            return false;
+        }
+    }
 }

@@ -13,7 +13,7 @@ class Publikasi extends BaseController
     public function __construct()
     {
         helper('form');
-        $this->ModelPublikasi = new ModelPublikasi;
+        $this->ModelPublikasi = new \App\Models\ModelPublikasi();
         // $this->session = \Config\Services::session();
     }
     
@@ -256,6 +256,38 @@ class Publikasi extends BaseController
             }
         } else {
             return $this->response->setJSON(['success' => false]);
+        }
+    }
+
+    public function updateLink()
+    {
+        try {
+            if (session()->get('role') != 4) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Unauthorized']);
+            }
+
+            $id = $this->request->getPost('id');
+            $type = $this->request->getPost('type');
+            $newLink = $this->request->getPost('new_link');
+
+            $columnName = 'link_publikasi';
+            if ($type === 'spsnrkf') {
+                $columnName = 'link_spsnrkf';
+            } elseif ($type === 'spsnres2') {
+                $columnName = 'link_spsnres2';
+            }
+
+            $result = $this->ModelPublikasi->updateLink($id, $columnName, $newLink);
+
+            if ($result) {
+                return $this->response->setJSON(['success' => true]);
+            } else {
+                log_message('error', 'Failed to update link. ID: ' . $id . ', Column: ' . $columnName . ', New Link: ' . $newLink);
+                return $this->response->setJSON(['success' => false, 'message' => 'Database update failed']);
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Exception in updateLink: ' . $e->getMessage());
+            return $this->response->setJSON(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
         }
     }
 }
