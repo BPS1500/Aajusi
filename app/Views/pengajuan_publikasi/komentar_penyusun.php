@@ -22,54 +22,62 @@
         </div>
 
         <div class="card-footer card-comments">
-    <div id="accordion">
-        <?php foreach ($Komentar as $komen => $value) : ?>
-            <div class="card">
-                <div class="card-header" id="headingOne">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapse<?= $value['id_komentar']; ?>" aria-expanded="true" aria-controls="collapseOne">
-                                <?= $value['pemeriksa'] ?>
-                                <span style="font-size: small;"><?= ' (' . $value['tgl_komen_admin'] . ')'; ?></span>
-                            </button>
-                        </h5>
-                        <div>
-                            <!-- Toggle Switch  -->
-                            <label class="switch">
-                                <input type="checkbox" class="toggle-status" data-id="<?= $value['id_komentar']; ?>" <?= $value['selesai'] == '1' ? 'checked' : '' ?>>
-                                <span class="slider round" 
-                                    data-toggle="tooltip" 
-                                    data-status="<?= $value['selesai'] == '1' ? 'sudah_sesuai' : 'belum_sesuai' ?>" 
-                                    title="<?= $value['selesai'] == '1' ? 'Sudah Sesuai' : 'Belum Sesuai' ?>"></span>
-                            </label>
-
-                            <?php if ($value['pemeriksa'] == session()->get('full_name')) : ?>
+            <div id="accordion">
+                <?php foreach ($Komentar as $komen => $value) : ?>
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse<?= $value['id_komentar']; ?>" aria-expanded="true" aria-controls="collapseOne">
+                                        <?= $value['pemeriksa'] ?>
+                                        <span style="font-size: small;"><?= ' (' . $value['tgl_komen_admin'] . ')'; ?></span>
+                                    </button>
+                                </h5>
+                                <div>
                                 <?php if (in_array(session()->get('role'), [1, 3])) : ?>
-                                    <button class="btn btn-sm btn-primary edit-comment ml-2" data-id="<?= $value['id_komentar']; ?>" data-comment="<?= htmlspecialchars($value['catatan']); ?>">Edit</button>
+                                    <!-- Toggle Switch for roles 1 & 3 -->
+                                    <label class="switch">
+                                        <input type="checkbox" class="toggle-status" data-id="<?= $value['id_komentar']; ?>" <?= $value['selesai'] == '1' ? 'checked' : '' ?>>
+                                        <span class="slider round" 
+                                            data-toggle="tooltip" 
+                                            data-status="<?= $value['selesai'] == '1' ? 'sudah_sesuai' : 'belum_sesuai' ?>" 
+                                            title="<?= $value['selesai'] == '1' ? 'Sudah Sesuai' : 'Belum Sesuai' ?>"></span>
+                                    </label>
+                                <?php elseif (in_array(session()->get('role'), [2, 4])) : ?>
+                                    <!-- Button for roles 2 & 4 -->
+                                    <button class="btn btn-sm btn-<?= $value['selesai'] == '1' ? 'success' : 'warning' ?> ml-2 status-btn" 
+                                        data-id="<?= $value['id_komentar']; ?>" 
+                                        data-status="<?= $value['selesai']; ?>">
+                                        <?= $value['selesai'] == '1' ? 'Sesuai' : 'Belum Sesuai' ?>
+                                    </button>
                                 <?php endif; ?>
-                                <?php if (session()->get('role') == '1') : ?>
-                                    <form action="<?= base_url('publikasi/deletekomentar/' . $value['id_komentar']) ?>" method="post" class="d-inline-block delete-form">
-                                        <?= csrf_field() ?>
-                                        <button type="submit" class="btn btn-sm btn-danger ml-2">Delete</button>
-                                    </form>
 
-                                <?php endif; ?>
-                            <?php endif; ?>
-                            
+                                    <?php if ($value['pemeriksa'] == session()->get('full_name')) : ?>
+                                        <?php if (in_array(session()->get('role'), [1, 3])) : ?>
+                                            <button class="btn btn-sm btn-primary edit-comment ml-2" data-id="<?= $value['id_komentar']; ?>" data-comment="<?= htmlspecialchars($value['catatan']); ?>">Edit</button>
+                                        <?php endif; ?>
+                                        <?php if (session()->get('role') == '1') : ?>
+                                            <form action="<?= base_url('publikasi/deletekomentar/' . $value['id_komentar']) ?>" method="post" class="d-inline-block delete-form">
+                                                <?= csrf_field() ?>
+                                                <button type="submit" class="btn btn-sm btn-danger ml-2">Delete</button>
+                                            </form>
+
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="collapse<?= $value['id_komentar']; ?>" class="collapse <?php if ($value['selesai'] == '0') { echo "show"; } ?>" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                                <?= $value['catatan'] ?>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div id="collapse<?= $value['id_komentar']; ?>" class="collapse <?php if ($value['selesai'] == '0') { echo "show"; } ?>" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body">
-                        <?= $value['catatan'] ?>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
-    </div>
-</div>
-
+        </div>
     </div>
 </div>
 
@@ -152,6 +160,33 @@
             data: {
                 id_komentar: id,
                 selesai: status,
+                <?= csrf_token() ?>: '<?= csrf_hash() ?>'
+            },
+            success: function(response) {
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+
+    $('.status-btn').click(function() {
+        var id = $(this).data('id');
+        var status = $(this).data('status');
+        var newStatus = status === 1 ? 0 : 1;
+        var newLabel = newStatus === 1 ? 'Sesuai' : 'Belum Sesuai';
+        var newClass = newStatus === 1 ? 'btn-success' : 'btn-warning';
+
+        $(this).data('status', newStatus);
+        $(this).removeClass('btn-success btn-warning').addClass(newClass);
+        $(this).text(newLabel);
+
+        $.ajax({
+            url: '<?= base_url('publikasi/updateStatus') ?>',
+            type: 'POST',
+            data: {
+                id_komentar: id,
+                selesai: newStatus,
                 <?= csrf_token() ?>: '<?= csrf_hash() ?>'
             },
             success: function(response) {
