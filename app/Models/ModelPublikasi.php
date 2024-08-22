@@ -36,11 +36,12 @@ class ModelPublikasi extends Model
     public function AllData()
     {
         return $this->db->table('tbl_publikasi')
+            ->select('tbl_publikasi.*, tbl_jenispublikasi.*, tbl_masterpublikasi.judul_publikasi_ind, tbl_fungsi.nama_fungsi, mst_status_review.status_review, mst_status_review.bgcolor')
             ->join('tbl_jenispublikasi', 'tbl_jenispublikasi.id_jenispublikasi = tbl_publikasi.id_jenispublikasi', 'left')
             ->join('tbl_masterpublikasi', 'tbl_masterpublikasi.id = tbl_publikasi.id_judulpublikasi', 'left')
             ->join('tbl_fungsi', 'tbl_fungsi.id_fungsi = tbl_publikasi.id_fungsi', 'left')
-            ->join('mst_status_review e', 'e.id=tbl_publikasi.flag', 'left')
-            ->Get()->getResultArray();
+            ->join('mst_status_review', 'mst_status_review.id = tbl_publikasi.flag', 'left')
+            ->get()->getResultArray();
     }
 
     public function AllJenispublikasi()

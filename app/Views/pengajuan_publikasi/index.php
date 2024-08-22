@@ -27,6 +27,9 @@
                         <th>Jenis</th>
                         <th>Judul Publikasi</th>
                         <th style="width: 30px">Fungsi Pengusul</th>
+                        <th>Nama Penyusun</th>
+                        <th>Tanggal Pengajuan</th>
+                        <th>Tanggal Perbaikan</th>
                         <th style="width: 170px">Tautan</th>
                         <th>Status</th>
                         <th style="width: 120px">Aksi</th>
@@ -38,16 +41,13 @@
 
                         <tr data-id="<?= $value['id_publikasi'] ?>">
                             <td style="text-align: center;"><?= $no++  ?>.</td>
-                            <td style="text-align: center;"><?php if ($value['id_jenispublikasi'] == 1) {
-                                                                echo "ARC";
-                                                            } else {
-                                                                echo "NON ARC";
-                                                            }
-                                                            ?></td>
- 
+                            <td style="text-align: center;"><?php echo ($value['id_jenispublikasi'] == 1) ? "ARC" : "NON ARC"; ?></td>
                             <td><?= $value['judul_publikasi_ind'] ?></td>
                             <td style="text-align: center;"><?= $value['nama_fungsi'] ?></td>
-                            
+                            <td><?= $value['nama_penyusun'] ?></td>
+                            <td><?= date('d-m-Y', strtotime($value['tgl_pengajuan'])) ?></td>
+                            <td><?= $value['tgl_repisi'] ? date('d-m-Y', strtotime($value['tgl_repisi'])) : '-' ?></td>
+                    
                             <td>
                                 <?php if (session()->get('role') == 4): ?>
                                     <button class="btn btn-primary update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="publikasi" data-toggle="modal" data-target="#updateLinkModal"><i class="fas fa-book"></i></button>

@@ -34,6 +34,7 @@
                                     </button>
                                 </h5>
                                 <div>
+                                    
                                 <?php if (in_array(session()->get('role'), [1, 3])) : ?>
                                     <!-- Toggle Switch for roles 1 & 3 -->
                                     <label class="switch">
