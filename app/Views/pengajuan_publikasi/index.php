@@ -66,11 +66,44 @@
                                         data-toggle="tooltip" data-placement="top" title="Status Publikasi">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
+                                <!-- Button Delete Komentar -->
+                                <?php 
+                                if ($value['flag'] == 5 && (session()->get('role') == 1 || session()->get('role') == 4)) { 
+                                ?>
+                                    <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="<?= $value['id_publikasi'] ?>" 
+                                            data-toggle="modal" data-target="#deleteModal"
+                                            data-toggle="tooltip" data-placement="top" title="Hapus Publikasi">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                <?php 
+                                } 
+                                ?>
                             </td>
                         </tr>
                     <?php  } ?>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Penghapusan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Apakah Anda yakin ingin menghapus publikasi ini?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
+            </div>
         </div>
     </div>
 </div>
@@ -133,6 +166,29 @@
 
 <script>
     $(document).ready(function() {
+        let deleteId;
+
+        $('.btn-delete').on('click', function() {
+            deleteId = $(this).data('id');
+        });
+
+        $('#confirmDelete').on('click', function() {
+            $.ajax({
+                url: '<?= base_url('Publikasi/deletePublikasi') ?>/' + deleteId,
+                type: 'POST',
+                success: function(response) {
+                    if(response.success) {
+                        location.reload();
+                    } else {
+                        alert('Gagal menghapus publikasi');
+                    }
+                },
+                error: function() {
+                    alert('Terjadi kesalahan');
+                }
+            });
+        });
+        
         $('[data-toggle="tooltip"]').tooltip();
 
         $('.btn-edit').on('click', function() {

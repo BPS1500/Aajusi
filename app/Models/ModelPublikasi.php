@@ -184,4 +184,9 @@ class ModelPublikasi extends Model
         $this->db->table('tbl_komentar')->delete(['id_komentar' => $id_komentar]);
     }
     
+    public function deletePublikasi($id_publikasi)
+    {
+        return $this->db->table('tbl_publikasi')->delete(['id_publikasi' => $id_publikasi]);
+    }
+    
 }

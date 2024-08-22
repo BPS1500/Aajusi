@@ -266,4 +266,17 @@ class Publikasi extends BaseController
         return redirect()->back();
     }    
 
+    public function deletePublikasi($id_publikasi)
+    {
+        if (session()->get('role') == 1 || session()->get('role') == 4) {
+            $result = $this->ModelPublikasi->deletePublikasi($id_publikasi);
+            if ($result) {
+                return $this->response->setJSON(['success' => true]);
+            } else {
+                return $this->response->setJSON(['success' => false]);
+            }
+        } else {
+            return $this->response->setJSON(['success' => false]);
+        }
+    }
 }
