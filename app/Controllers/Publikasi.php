@@ -231,7 +231,6 @@ class Publikasi extends BaseController
             return $this->response->setJSON(['success' => false]);
         }
     }
-    
 
     public function deleteKomentar($id_komentar)
     {
@@ -290,4 +289,45 @@ class Publikasi extends BaseController
             return $this->response->setJSON(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
         }
     }
+
+    public function addReply()
+    {
+        $id_komentar = $this->request->getPost('id_komentar');
+        $catatan = $this->request->getPost('catatan');
+        $pemeriksa = session()->get('full_name');
+    
+        $data = [
+            'id_komentar' => $id_komentar,
+            'catatan' => $catatan,
+            'pemeriksa' => $pemeriksa,
+            'tgl_reply' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+    
+        $result = $this->ModelPublikasi->addReply($data);
+    
+        if ($result) {
+            return $this->response->setJSON(['success' => true]);
+        } else {
+            return $this->response->setJSON(['success' => false]);
+        }
+    }
+
+    public function getReplies()
+    {
+        $id_komentar = $this->request->getGet('id_komentar');
+        $replies = $this->ModelPublikasi->getReplies($id_komentar);
+
+        $html = '';
+        foreach ($replies as $reply) {
+            $html .= '<div class="reply">';
+            $html .= '<p><strong>' . $reply['pemeriksa'] . '</strong> (' . $reply['tgl_reply'] . ')</p>';
+            $html .= '<p>' . $reply['catatan'] . '</p>';
+            $html .= '</div>';
+        }
+
+        return $this->response->setBody($html);
+    }
+
 }

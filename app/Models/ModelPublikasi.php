@@ -207,4 +207,19 @@ class ModelPublikasi extends Model
             return false;
         }
     }
+
+    public function addReply($data)
+    {
+        return $this->db->table('tbl_replykomentar')->insert($data);
+    }
+
+    public function getReplies($id_komentar)
+    {
+        return $this->db->table('tbl_replykomentar')
+            ->where('id_komentar', $id_komentar)
+            ->orderBy('created_at', 'ASC')
+            ->get()
+            ->getResultArray();
+    }
+
 }
