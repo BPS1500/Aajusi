@@ -208,18 +208,17 @@ class ModelPublikasi extends Model
         }
     }
 
-    public function addReply($data)
+    public function addReplyKomentar($data)
     {
         return $this->db->table('tbl_replykomentar')->insert($data);
     }
-
-    public function getReplies($id_komentar)
+    
+    public function getRepliesByKomentar($id_komentar)
     {
         return $this->db->table('tbl_replykomentar')
             ->where('id_komentar', $id_komentar)
-            ->orderBy('created_at', 'ASC')
             ->get()
             ->getResultArray();
     }
-
+    
 }

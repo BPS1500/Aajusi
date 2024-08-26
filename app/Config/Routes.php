@@ -60,8 +60,8 @@ $routes->post('publikasi/updateStatus', 'Publikasi::updateStatus');
 $routes->post('Publikasi/deletePublikasi/(:num)', 'Publikasi::deletePublikasi/$1');
 $routes->post('Publikasi/updateLink', 'Publikasi::updateLink');
 
-$routes->post('Publikasi/addReply', 'Publikasi::addReply');
 $routes->get('Publikasi/getReplies', 'Publikasi::getReplies');
+$routes->post('publikasi/addReply', 'Publikasi::addReply');
 
 
 

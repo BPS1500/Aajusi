@@ -1,42 +1,39 @@
 <?= $this->extend('layouts/main_layout') ?>
 <?= $this->section('content') ?>
 
-<div class="col-md-10">
-    <!-- Form Tambah Komentar -->
+<div class="col-md-12">
     <div class="card mb-4">
         <div class="card-body">
             <div id="newCommentFormContainer">
-                <button class="btn btn-outline-primary btn-block" type="button" data-toggle="collapse" data-target="#newCommentForm" aria-expanded="false" aria-controls="newCommentForm"> Tambah Komentar </button>
-                <div class="collapse" id="newCommentForm">
-                    <form action="<?= base_url('publikasi/addkomentar') ?>" method="post" class="mt-3">
+                <button class="btn btn-outline-primary btn-block" type="button" data-toggle="collapse" data-target="#newCommentForm" aria-expanded="false" aria-controls="newCommentForm">
+                    <i class="fas fa-plus-circle"></i> Tambah Komentar
+                </button>
+                <div class="collapse mt-3" id="newCommentForm">
+                    <form action="<?= base_url('publikasi/addkomentar') ?>" method="post">
                         <?= csrf_field() ?>
                         <input type="hidden" name="id_publikasi" value="<?= $id_publikasi ?>">
                         <div class="form-group">
-                            <label for="new_comment">Komentar</label>
-                            <textarea id="summernote" class="form-control" id="new_comment" name="catatan" rows="3" required></textarea>
+                            <textarea id="summernote" class="form-control" name="catatan" rows="3" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Kirim Komentar</button>
+                        <button type="submit" class="btn btn-primary">Kirim</button>
                     </form>
                 </div>
             </div>
         </div>
 
-        <div class="card-footer card-comments">
-            <div id="accordion">
+        <div class="card-body">
+            <div id="commentSection">
                 <?php foreach ($Komentar as $komen => $value) : ?>
-                    <div class="card">
-                        <div class="card-header" id="headingOne">
-                            <div class="d-flex justify-content-between align-items-center">
+                    <div class="comment-thread mb-4">
+                        <div class="comment-main p-3 bg-light rounded">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h5 class="mb-0">
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse<?= $value['id_komentar']; ?>" aria-expanded="true" aria-controls="collapseOne">
-                                        <?= $value['pemeriksa'] ?>
-                                        <span style="font-size: small;"><?= ' (' . $value['tgl_komen_admin'] . ')'; ?></span>
-                                    </button>
+                                    <?= $value['pemeriksa'] ?>
+                                    <small class="text-muted"><?= $value['tgl_komen_admin'] ?></small>
                                 </h5>
                                 <div>
                                     <?php if (in_array(session()->get('role'), [1, 3])) : ?>
-                                        <!-- Toggle Switch untuk roles 1 & 3 -->
-                                        <label class="switch">
+                                        <label class="switch mr-2">
                                             <input type="checkbox" class="toggle-status" data-id="<?= $value['id_komentar']; ?>" <?= $value['selesai'] == '1' ? 'checked' : '' ?>>
                                             <span class="slider round" 
                                                 data-toggle="tooltip" 
@@ -44,8 +41,7 @@
                                                 title="<?= $value['selesai'] == '1' ? 'Sudah Sesuai' : 'Belum Sesuai' ?>"></span>
                                         </label>
                                     <?php elseif (in_array(session()->get('role'), [2, 4])) : ?>
-                                        <!-- Button untuk roles 2 & 4 -->
-                                        <button class="btn btn-sm btn-<?= $value['selesai'] == '1' ? 'success' : 'warning' ?> ml-2 status-btn" 
+                                        <button class="btn btn-sm btn-<?= $value['selesai'] == '1' ? 'success' : 'warning' ?> mr-2 status-btn" 
                                             data-id="<?= $value['id_komentar']; ?>" 
                                             data-status="<?= $value['selesai']; ?>">
                                             <?= $value['selesai'] == '1' ? 'Sesuai' : 'Belum Sesuai' ?>
@@ -54,38 +50,55 @@
 
                                     <?php if ($value['pemeriksa'] == session()->get('full_name')) : ?>
                                         <?php if (in_array(session()->get('role'), [1, 3])) : ?>
-                                            <button class="btn btn-sm btn-primary edit-comment ml-2" data-id="<?= $value['id_komentar']; ?>" data-comment="<?= htmlspecialchars($value['catatan']); ?>">Edit</button>
+                                            <button class="btn btn-sm btn-primary edit-comment mr-2" data-id="<?= $value['id_komentar']; ?>" data-comment="<?= htmlspecialchars($value['catatan']); ?>">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
                                         <?php endif; ?>
                                         <?php if (session()->get('role') == '1') : ?>
                                             <form action="<?= base_url('publikasi/deletekomentar/' . $value['id_komentar']) ?>" method="post" class="d-inline-block delete-form">
                                                 <?= csrf_field() ?>
-                                                <button type="submit" class="btn btn-sm btn-danger ml-2">Delete</button>
+                                                <button type="submit" class="btn btn-sm btn-danger mr-2">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </button>
                                             </form>
                                         <?php endif; ?>
                                     <?php endif; ?>
-                                    
-                                    <!-- Reply button -->
-                                    <button class="btn btn-sm btn-info reply-btn ml-2" data-id="<?= $value['id_komentar']; ?>">Balas</button>
+                                    <button class="btn btn-sm btn-info reply-btn" data-id="<?= $value['id_komentar']; ?>">
+                                        <i class="fas fa-reply"></i> Balas
+                                    </button>
                                 </div>
+                            </div>
+                            <div class="comment-content">
+                                <?= $value['catatan'] ?>
                             </div>
                         </div>
 
-                        <div id="collapse<?= $value['id_komentar']; ?>" class="collapse <?php if ($value['selesai'] == '0') { echo "show"; } ?>" aria-labelledby="headingOne" data-parent="#accordion">
-                            <div class="card-body">
-                                <?= $value['catatan'] ?>
+                        <div class="replies ml-4 mt-3">
+                            <?php if (!empty($value['replies'])): ?>
+                                <?php foreach ($value['replies'] as $reply): ?>
+                                    <div class="reply p-3 bg-white rounded mb-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0">
+                                                <?= $reply['pemeriksa'] ?>
+                                                <small class="text-muted"><?= $reply['tgl_reply'] ?></small>
+                                            </h6>
+                                        </div>
+                                        <div class="reply-content">
+                                            <?= $reply['catatan'] ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
 
-                                <!-- Form reply -->
-                                <div class="reply-form mt-3" id="reply-form-<?= $value['id_komentar']; ?>" style="display: none;">
-                                    <form class="add-reply-form" data-id="<?= $value['id_komentar']; ?>">
-                                        <textarea class="form-control" name="reply" rows="2" required></textarea>
-                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Kirim</button>
-                                    </form>
-                                </div>
-
-                                <!-- Replies section -->
-                                <div class="replies mt-3" id="replies-<?= $value['id_komentar']; ?>">
-                                    <!-- Replies will be loaded here -->
-                                </div>
+                            <div class="reply-form-container mt-3" style="display: none;">
+                                <form class="reply-form" data-id="<?= $value['id_komentar']; ?>">
+                                    <?= csrf_field() ?>
+                                    <input type="hidden" name="id_komentar" value="<?= $value['id_komentar'] ?>">
+                                    <div class="form-group">
+                                        <textarea class="form-control" name="catatan" rows="2" required placeholder="Tulis balasan Anda..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm">Kirim</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -110,7 +123,7 @@
                     <input type="hidden" id="edit_comment_id" name="id_komentar">
                     <div class="form-group">
                         <label for="edit_comment">Komentar</label>
-                        <textarea id="summernote-edit" class="form-control" id="edit_comment" name="catatan" rows="3" required></textarea>
+                        <textarea id="summernote-edit" class="form-control" name="catatan" rows="3" required></textarea>
                     </div>
                 </form>
             </div>
@@ -232,86 +245,48 @@ $(document).ready(function() {
         });
     });
 
-    // Toggle reply form
     $('.reply-btn').click(function() {
         var id = $(this).data('id');
-        $('#reply-form-' + id).toggle();
+        var replyFormContainer = $(this).closest('.comment-thread').find('.reply-form-container');
+        
+        $('.reply-form-container').not(replyFormContainer).hide();
+        
+        replyFormContainer.toggle();
     });
 
-    $('.add-reply-form').submit(function(e) {
+    $('.reply-form').submit(function(e) {
         e.preventDefault();
-        var id = $(this).data('id');
-        var reply = $(this).find('textarea').val();
-
+        var form = $(this);
+        var id_komentar = form.data('id');
+        
         $.ajax({
             url: '<?= base_url('publikasi/addReply') ?>',
             type: 'POST',
-            data: {
-                id_komentar: id,
-                catatan: reply,
-                <?= csrf_token() ?>: '<?= csrf_hash() ?>'
-            },
+            data: form.serialize(),
             success: function(response) {
-                if (response.success) {
-                    loadReplies(id);
-                    $('#reply-form-' + id).find('textarea').val('');
-                    $('#reply-form-' + id).hide();
-                }
+                form.find('textarea').val('');
+                form.parent().hide();
+                location.reload();
             },
             error: function(xhr, status, error) {
                 console.error(error);
-                alert('Failed to submit reply: ' + error);
             }
         });
     });
 
-
-    function loadReplies(id) {
+    function refreshReplies(id_komentar) {
         $.ajax({
             url: '<?= base_url('publikasi/getReplies') ?>',
             type: 'GET',
-            data: { id_komentar: id },
+            data: { id_komentar: id_komentar },
             success: function(response) {
-                $('#replies-' + id).html(response);
+                $('#replies_' + id_komentar).html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
             }
         });
     }
-
-    $('.replies').each(function() {
-        var id = $(this).attr('id').split('-')[1];
-        loadReplies(id);
-    });
-
-    // Submit reply
-    $(document).on('submit', '.add-reply-form', function(e) {
-        e.preventDefault();
-        var id = $(this).data('id');
-        var reply = $(this).find('textarea[name="reply"]').val();
-
-        $.ajax({
-            url: '<?= base_url('publikasi/addReply') ?>',
-            type: 'POST',
-            data: {
-                id_komentar: id,
-                catatan: reply,
-                <?= csrf_token() ?>: '<?= csrf_hash() ?>'
-            },
-            success: function(response) {
-                alert("tes");
-                if (response.success) {
-                    loadReplies(id);
-                    $('.add-reply-form[data-id="' + id + '"]').find('textarea[name="reply"]').val('');
-                    $('#reply-form-' + id).hide();
-                } else {
-                    alert('Failed to add reply. Please try again.');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
-        });
-    });
 });
 </script>
 
@@ -364,15 +339,29 @@ input:checked + .slider:before {
 .slider.round {
     border-radius: 20px;
 }
+
 .slider.round:before {
     border-radius: 50%;
 }
 
+.comment-thread {
+    border-left: 2px solid #007bff;
+    padding-left: 15px;
+}
+
+.comment-main {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
 .replies {
     margin-left: 20px;
-    border-left: 2px solid #ccc;
-    padding-left: 10px;
+}
+
+.reply {
+    border: 1px solid #e9ecef;
 }
 </style>
+
 
 <?= $this->endSection() ?>

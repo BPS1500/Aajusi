@@ -69,6 +69,11 @@ class Publikasi extends BaseController
     public function LihatKomentar($id_publikasi)
     {
         $dataKomentar = $this->ModelPublikasi->OneDataKomenter($id_publikasi);
+        
+        foreach ($dataKomentar as &$komentar) {
+            $komentar['replies'] = $this->ModelPublikasi->getRepliesByKomentar($komentar['id_komentar']);
+        }
+        
         $data = [
             'judul' => 'Komentar',
             'page' => 'v_komentar_penyusun',
@@ -78,6 +83,7 @@ class Publikasi extends BaseController
     
         return view('pengajuan_publikasi/komentar_penyusun', $data);
     }
+    
     
     public function InsertData()
     {
@@ -292,21 +298,19 @@ class Publikasi extends BaseController
 
     public function addReply()
     {
-        $id_komentar = $this->request->getPost('id_komentar');
-        $catatan = $this->request->getPost('catatan');
         $pemeriksa = session()->get('full_name');
 
         $data = [
-            'id_komentar' => $id_komentar,
-            'catatan' => $catatan,
+            'id_komentar' => $this->request->getPost('id_komentar'),
+            'catatan' => $this->request->getPost('catatan'),
             'pemeriksa' => $pemeriksa,
             'tgl_reply' => date('Y-m-d H:i:s'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
-        $result = $this->ModelPublikasi->addReply($data);
-
+        $result = $this->ModelPublikasi->addReplyKomentar($data);
+        
         if ($result) {
             return $this->response->setJSON(['success' => true]);
         } else {
@@ -317,13 +321,16 @@ class Publikasi extends BaseController
     public function getReplies()
     {
         $id_komentar = $this->request->getGet('id_komentar');
-        $replies = $this->ModelPublikasi->getReplies($id_komentar);
+        $replies = $this->ModelPublikasi->getRepliesByKomentar($id_komentar);
 
         $html = '';
         foreach ($replies as $reply) {
-            $html .= '<div class="reply">';
-            $html .= '<p><strong>' . $reply['pemeriksa'] . '</strong> (' . $reply['tgl_reply'] . ')</p>';
+            $html .= '<div class="card mt-2">';
+            $html .= '<div class="card-body">';
+            $html .= '<strong>' . $reply['pemeriksa'] . ':</strong>';
             $html .= '<p>' . $reply['catatan'] . '</p>';
+            $html .= '<small>' . $reply['tgl_reply'] . '</small>';
+            $html .= '</div>';
             $html .= '</div>';
         }
 
