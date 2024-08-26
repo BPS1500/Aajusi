@@ -20,12 +20,10 @@
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
-    <!-- Include Summernote CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
-    <!-- Include Summernote JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
 
-    
+    <!-- Summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
 </head>
 </head>
 
@@ -137,11 +135,14 @@
     <script src="<?= base_url('assets/AdminLTE/plugins/datatables/jquery.dataTables.min.js') ?>"></script>
     <script src="<?= base_url('assets/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
     <script src="<?= base_url('assets/AdminLTE/plugins/select2/js/select2.min.js') ?>"></script> <!-- Select2 JS -->
+    
     <script>
         $(document).ready(function() {
             $('.select2').select2();
         });
     </script>
+
+
 
     <script>
         $(document).ready(function() {
@@ -202,6 +203,20 @@
                     info: "Menampilkan Halaman _PAGE_ dari _PAGES_"
                 }
             });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#summernote').summernote();
+        });
+    </script>
+    
+    <script>
+        $('#summernote-edit').summernote({
+            height: 150,
+            placeholder: 'Edit your comment here...',
         });
     </script>
 </body>

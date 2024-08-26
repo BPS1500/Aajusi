@@ -13,7 +13,7 @@
                         <input type="hidden" name="id_publikasi" value="<?= $id_publikasi ?>">
                         <div class="form-group">
                             <label for="new_comment">Komentar</label>
-                            <textarea class="form-control" id="new_comment" name="catatan" rows="3" required></textarea>
+                            <!-- <textarea id="summernote" class="form-control" id="new_comment" name="catatan" rows="3" required></textarea> -->
                         </div>
                         <button type="submit" class="btn btn-primary">Kirim Komentar</button>
                     </form>
@@ -35,7 +35,7 @@
                                 </h5>
                                 <div>
                                     <?php if (in_array(session()->get('role'), [1, 3])) : ?>
-                                        <!-- Toggle Switch for roles 1 & 3 -->
+                                        <!-- Toggle Switch untuk roles 1 & 3 -->
                                         <label class="switch">
                                             <input type="checkbox" class="toggle-status" data-id="<?= $value['id_komentar']; ?>" <?= $value['selesai'] == '1' ? 'checked' : '' ?>>
                                             <span class="slider round" 
@@ -44,7 +44,7 @@
                                                 title="<?= $value['selesai'] == '1' ? 'Sudah Sesuai' : 'Belum Sesuai' ?>"></span>
                                         </label>
                                     <?php elseif (in_array(session()->get('role'), [2, 4])) : ?>
-                                        <!-- Button for roles 2 & 4 -->
+                                        <!-- Button untuk roles 2 & 4 -->
                                         <button class="btn btn-sm btn-<?= $value['selesai'] == '1' ? 'success' : 'warning' ?> ml-2 status-btn" 
                                             data-id="<?= $value['id_komentar']; ?>" 
                                             data-status="<?= $value['selesai']; ?>">
@@ -74,7 +74,7 @@
                             <div class="card-body">
                                 <?= $value['catatan'] ?>
 
-                                <!-- Reply form (initially hidden) -->
+                                <!-- Form reply -->
                                 <div class="reply-form mt-3" id="reply-form-<?= $value['id_komentar']; ?>" style="display: none;">
                                     <form class="add-reply-form" data-id="<?= $value['id_komentar']; ?>">
                                         <textarea class="form-control" name="reply" rows="2" required></textarea>
@@ -84,6 +84,7 @@
 
                                 <!-- Replies section -->
                                 <div class="replies mt-3" id="replies-<?= $value['id_komentar']; ?>">
+                                    <!-- Replies will be loaded here -->
                                 </div>
                             </div>
                         </div>
@@ -96,7 +97,7 @@
 
 <!-- Modal Edit Komentar-->
 <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="editCommentModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editCommentModalLabel">Edit Komentar</h5>
@@ -109,7 +110,7 @@
                     <input type="hidden" id="edit_comment_id" name="id_komentar">
                     <div class="form-group">
                         <label for="edit_comment">Komentar</label>
-                        <textarea class="form-control" id="edit_comment" name="catatan" rows="3" required></textarea>
+                        <textarea id="summernote-edit" class="form-control" id="edit_comment" name="catatan" rows="3" required></textarea>
                     </div>
                 </form>
             </div>
@@ -121,6 +122,7 @@
     </div>
 </div>
 
+
 <script>
 $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
@@ -129,13 +131,14 @@ $(document).ready(function() {
         var id = $(this).data('id');
         var comment = $(this).data('comment');
         $('#edit_comment_id').val(id);
-        $('#edit_comment').val(comment);
+        $('#summernote-edit').summernote('code', comment);
         $('#editCommentModal').modal('show');
     });
 
     $('#saveEditComment').click(function() {
         var id = $('#edit_comment_id').val();
-        var comment = $('#edit_comment').val();
+        var comment = $('#summernote-edit').summernote('code');
+        
         $.ajax({
             url: '<?= base_url('publikasi/editkomentar') ?>',
             type: 'POST',
@@ -229,6 +232,7 @@ $(document).ready(function() {
         });
     });
 
+    // Toggle reply form
     $('.reply-btn').click(function() {
         var id = $(this).data('id');
         $('#reply-form-' + id).toggle();
@@ -253,9 +257,14 @@ $(document).ready(function() {
                     $('#reply-form-' + id).find('textarea').val('');
                     $('#reply-form-' + id).hide();
                 }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                alert('Failed to submit reply: ' + error);
             }
         });
     });
+
 
     function loadReplies(id) {
         $.ajax({
@@ -271,6 +280,37 @@ $(document).ready(function() {
     $('.replies').each(function() {
         var id = $(this).attr('id').split('-')[1];
         loadReplies(id);
+    });
+
+    // Submit reply
+    $(document).on('submit', '.add-reply-form', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        var reply = $(this).find('textarea[name="reply"]').val();
+
+        $.ajax({
+            url: '<?= base_url('publikasi/addReply') ?>',
+            type: 'POST',
+            data: {
+                id_komentar: id,
+                catatan: reply,
+                <?= csrf_token() ?>: '<?= csrf_hash() ?>'
+            },
+            success: function(response) {
+                alert("tes");
+                if (response.success) {
+                    loadReplies(id);
+                    $('.add-reply-form[data-id="' + id + '"]').find('textarea[name="reply"]').val('');
+                    $('#reply-form-' + id).hide();
+                } else {
+                    alert('Failed to add reply. Please try again.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
     });
 });
 </script>

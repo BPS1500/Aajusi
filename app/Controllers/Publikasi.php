@@ -295,7 +295,7 @@ class Publikasi extends BaseController
         $id_komentar = $this->request->getPost('id_komentar');
         $catatan = $this->request->getPost('catatan');
         $pemeriksa = session()->get('full_name');
-    
+
         $data = [
             'id_komentar' => $id_komentar,
             'catatan' => $catatan,
@@ -304,9 +304,9 @@ class Publikasi extends BaseController
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ];
-    
+
         $result = $this->ModelPublikasi->addReply($data);
-    
+
         if ($result) {
             return $this->response->setJSON(['success' => true]);
         } else {
