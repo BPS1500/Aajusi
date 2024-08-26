@@ -13,7 +13,7 @@
                         <input type="hidden" name="id_publikasi" value="<?= $id_publikasi ?>">
                         <div class="form-group">
                             <label for="new_comment">Komentar</label>
-                            <!-- <textarea id="summernote" class="form-control" id="new_comment" name="catatan" rows="3" required></textarea> -->
+                            <textarea id="summernote" class="form-control" id="new_comment" name="catatan" rows="3" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Kirim Komentar</button>
                     </form>
@@ -138,7 +138,7 @@ $(document).ready(function() {
     $('#saveEditComment').click(function() {
         var id = $('#edit_comment_id').val();
         var comment = $('#summernote-edit').summernote('code');
-        
+
         $.ajax({
             url: '<?= base_url('publikasi/editkomentar') ?>',
             type: 'POST',
