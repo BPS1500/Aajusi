@@ -63,6 +63,12 @@ $routes->post('Publikasi/updateLink', 'Publikasi::updateLink');
 $routes->get('Publikasi/getReplies', 'Publikasi::getReplies');
 $routes->post('publikasi/addReply', 'Publikasi::addReply');
 
+// Routes Kelola Pengguna
+$routes->get('/kelola/peranpengguna', 'Pengguna::index');
+$routes->get('kelola/create', 'Pengguna::createUser');
+$routes->post('/kelola/pengguna/store', 'Pengguna::storeUser');
+
+
 
 
 
