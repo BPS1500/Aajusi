@@ -5,27 +5,21 @@ namespace App\Controllers;
 use App\Models\SprpModel;
 use CodeIgniter\Controller;
 
-class SprpController extends Controller
+class PemeriksaanController extends Controller
 {
     public function index()
     {
         $model = new SprpModel();
         $data['sprps'] = $model->findAll();
-    
-        // Iterasi melalui setiap item untuk menambahkan nama kategori, pembuat cover, dan diterbitkan untuk
+
+        // Iterate through each item to add category name, cover maker, and published for names
         foreach ($data['sprps'] as &$sprp) {
-            // Mengambil nama kategori berdasarkan id_kategori
             $sprp['kategori_pub'] = $model->getKategoriName($sprp['id_kategori']) ?? 'Unknown';
-    
-            // Mengambil nama pembuat cover berdasarkan id_cover
             $sprp['pembuat_cover'] = $model->getCoverName($sprp['id_cover']) ?? 'Unknown';
             $sprp['orientasi'] = $model->getOrientasiName($sprp['id_orientasi']) ?? 'Unknown';
             $sprp['diterbitkanuntuk'] = $model->getTerbitName($sprp['id_diterbit']) ?? 'Unknown';
             $sprp['nama_ukuran'] = $model->getUkuranName($sprp['id_ukuran']) ?? 'Unknown';
             $sprp['nama_wilayah'] = $model->getWilayahName($sprp['kodewilayah']) ?? 'Unknown';
-            // $sprp['jenis_publikasi'] = $model->getPublikasiName($sprp['id_jenispublikasi']) ?? 'Unknown';
-          
-
 
             $publikasiDetails = $model->getPublikasiDetails($sprp['id']);
             $sprp['katalog'] = $publikasiDetails['katalog'] ?? 'Unknown';
@@ -33,8 +27,6 @@ class SprpController extends Controller
             $sprp['judul_publikasi_eng'] = $publikasiDetails['judul_publikasi_eng'] ?? 'Unknown';
             $sprp['no_issn'] = $publikasiDetails['no_issn'] ?? 'Unknown';
             $sprp['jenis_publikasi'] = $publikasiDetails['id_jenispublikasi'] ?? 'Unknown';
-            
-
 
             if ($sprp['jenis_publikasi'] == 1) {
                 $sprp['jenis_publikasi'] = 'ARC';
@@ -43,14 +35,61 @@ class SprpController extends Controller
             } else {
                 $sprp['jenis_publikasi'] = 'Unknown';
             }
-            
-       
         }
-    
-        // Mengembalikan tampilan dengan data yang telah diproses
-        return view('sprp/index', $data);
+
+        // Return the processed data to the view
+        return view('pemeriksaan/index', $data);
     }
-    
+
+    public function store()
+    {
+        $model = new SprpModel();
+        
+        // Validate input data from the modal
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'kodewilayah' => 'required',
+            'id_kategori' => 'required',
+            'ISBN' => 'required',
+            'jml_arab' => 'required|numeric',
+            'jml_romawi' => 'required|numeric',
+            'kerjasama_instansi' => 'required',
+            'id_cover' => 'required',
+            'id_orientasi' => 'required',
+            'id_diterbit' => 'required',
+            'id_ukuran' => 'required',
+            'id' => 'required',
+            'nomor_publikasi' => 'required' // Add validation rule for nomor_publikasi
+        ]);
+
+        if (!$this->validate($validation->getRules())) {
+            // Return to the form with validation errors
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        // If validation passes, gather the data
+        $data = [
+            'kodewilayah' => $this->request->getPost('kodewilayah'),
+            'id_kategori' => $this->request->getPost('id_kategori'),
+            'ISBN' => $this->request->getPost('ISBN'),
+            'jml_arab' => $this->request->getPost('jml_arab'),
+            'jml_romawi' => $this->request->getPost('jml_romawi'),
+            'kerjasama_instansi' => $this->request->getPost('kerjasama_instansi'),
+            'id_cover' => $this->request->getPost('id_cover'),
+            'id_orientasi' => $this->request->getPost('id_orientasi'),
+            'id_diterbit' => $this->request->getPost('id_diterbit'),
+            'id_ukuran' => $this->request->getPost('id_ukuran'),
+            'id' => $this->request->getPost('id'),
+            'nomor_publikasi' => $this->request->getPost('nomor_publikasi') // Add nomor_publikasi to the data array
+        ];
+
+        // Insert data into the table
+        $model->insert($data);
+
+        // Redirect to the index page
+        return redirect()->to('/pemeriksaan');
+    }
+
     public function create()
     {
         $model = new SprpModel();
@@ -63,7 +102,7 @@ class SprpController extends Controller
         $dataukuran = $model->getUkuran();
         $dataorientasi = $model->getOrientasi();
 
-        return view('sprp/create',[
+        return view('pemeriksaan/create',[
         'datawilayah' => $model->getWilayah(),
         'datakategori'=> $model->getKategori(),
         'datajenispublikasi' => $model->getJenispublikasi(),
@@ -76,27 +115,7 @@ class SprpController extends Controller
 
         
     }
-
-    public function store()
-    {
-        $model = new SprpModel();
-        $data = [
-            'kodewilayah' => $this->request->getPost('kodewilayah'),
-            'id_kategori' => $this->request->getPost('id_kategori'),
-            'ISBN' => $this->request->getPost('ISBN'),
-            'jml_arab' => $this->request->getPost('jml_arab'),
-            'jml_romawi' => $this->request->getPost('jml_romawi'),
-            'kerjasama_instansi' => $this->request->getPost('kerjasama_instansi'),
-            'id_cover' => $this->request->getPost('id_cover'),
-            'id_orientasi' => $this->request->getPost('id_orientasi'),
-            'id_diterbit' => $this->request->getPost('id_diterbit'),
-            'id_ukuran' => $this->request->getPost('id_ukuran'),
-            'id'=> $this->request->getPost('id')
-        
-        ];
-        $model->insert($data);
-        return redirect()->to('/sprp');
-    }
+    
 
     public function edit($id_sprp)
     {
@@ -111,7 +130,7 @@ class SprpController extends Controller
         $data['dataukuran'] = $model->getUkuran();
         $data['dataorientasi'] = $model->getOrientasi();
         
-        return view('sprp/edit', $data);
+        return view('pemeriksaan/edit', $data);
     }
     
     public function update($id_sprp)
@@ -130,14 +149,14 @@ class SprpController extends Controller
             'id_ukuran' => $this->request->getPost('id_ukuran')
         ];
         $model->update($id_sprp, $data);
-        return redirect()->to('/sprp');
+        return redirect()->to('/pemeriksaan');
     }
 
     public function delete($id_sprp)
     {
         $model = new SprpModel();
         $model->delete($id_sprp);
-        return redirect()->to('/sprp');
+        return redirect()->to('/pemeriksaan');
     }   
 
 
@@ -153,7 +172,9 @@ class SprpController extends Controller
             $sprp['orientasi'] = $model->getOrientasiName($sprp['id_orientasi']) ?? 'Unknown';
             $sprp['diterbitkanuntuk'] = $model->getTerbitName($sprp['id_diterbit']) ?? 'Unknown';
             $sprp['nama_ukuran'] = $model->getUkuranName($sprp['id_ukuran']) ?? 'Unknown';
+            // $sprp['nomor_publikasi'] = $model->getNomorPub($sprp['id_nomorpub']) ?? 'Unknown';
             $sprp['nama_wilayah'] = $model->getWilayahName($sprp['kodewilayah']) ?? 'Unknown';
+            
 
             $publikasiDetails = $model->getPublikasiDetails($sprp['id']);
             $sprp['katalog'] = $publikasiDetails['katalog'] ?? 'Unknown';
@@ -174,7 +195,15 @@ class SprpController extends Controller
         } else {
             return $this->response->setJSON(['error' => 'Data not found']);
         }
-    }   
+    }
+
+    private function saveToSprp($data)
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table('tbl_input_sprp');
+    
+        $builder->insert($data);
+    }
 
     public function store_nomor_publikasi()
 {
@@ -193,5 +222,15 @@ class SprpController extends Controller
         return $this->response->setJSON(['success' => false, 'message' => 'Gagal menyimpan Nomor Publikasi.']);
     }
 }
-    
 }
+
+  
+  
+
+
+
+
+
+
+    
+

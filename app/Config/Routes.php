@@ -31,6 +31,12 @@ $routes->get('Publikasi/LihatKomentar/(:num)', 'Publikasi::LihatKomentar/$1');
 $routes->get('pengajuan/publikasi', 'Publikasi::index');
 $routes->get('pemeriksaan/publikasi', 'Publikasi::index');
 $routes->post('Publikasi/InsertData', 'Publikasi::InsertData');
+$routes->get('pemeriksaan/sprp', 'PemeriksaanController::index');
+$routes->get('pemeriksaan/sprp', 'PemeriksaanController::save_no_publikasi/$1');
+$routes->post('pemeriksaan/save_no_publikasi', 'PemeriksaanController::save_no_publikasi');
+$routes->get('pemeriksaan/get_details/(:num)', 'PemeriksaanController::get_details/$1');
+$routes->post('/pemeriksaan/store_nomor_publikasi', 'PemeriksaanController::store_nomor_publikasi');
+// $routes->get('pemeriksaan/pemeriksaan', 'Pemeriksaan::index');
 
 // Routes for SPRP CRUD
 $routes->get('/sprp', 'SprpController::index');
@@ -40,6 +46,9 @@ $routes->post('/sprp/store', 'SprpController::store');
 $routes->get('/sprp/edit/(:num)', 'SprpController::edit/$1');
 $routes->post('/sprp/update/(:num)', 'SprpController::update/$1');
 $routes->get('/sprp/delete/(:num)', 'SprpController::delete/$1');
+$routes->get('sprp/get_details/(:num)', 'SprpController::get_details/$1');
+$routes->get('sprp/updateNomorPublikasi/(:num)', 'SprpController::updateNomorPublikasi/$1');
+$routes->get('sprp/save_no_publikasi/(:num)', 'SprpController::save_no_publikasi/$1');
 
 // Routes Master Publikasi
 $routes->get('kelola/masterpublikasi', 'MasterPublikasi::index');
