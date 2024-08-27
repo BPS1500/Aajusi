@@ -32,7 +32,8 @@
                             <?php } ?>
                         </select>
                     </div>
-                    <input type="hidden" id="id_user_upload" name="id_user_upload" value="<?= $_SESSION['nip_lama'] ?>">
+                    <!-- Hidden NIP Lama -->
+                    <input type="hidden" id="nip_lama" name="nip_lama" value="<?= $_SESSION['nip_lama'] ?>">
                     <div class="form-group">
                         <label>Judul Publikasi</label>
                         <select name="id_judulpublikasi" id="id_judulpublikasi" class="form-control" required>
@@ -51,7 +52,7 @@
                     </div>
                     <div class="form-group">
                         <label>Nama Penyusun</label>
-                        <input type="text" class="form-control" placeholder="Masukkan Nama Penyusun" name="nama_penyusun" required>
+                        <input type="text" class="form-control" name="nama_penyusun" value="<?= $_SESSION['full_name'] ?>" readonly required>
                         <p class="text-danger"><?= $validation->hasError('nama_penyusun') ? $validation->getError('nama_penyusun') : '' ?></p>
                     </div>
                     <div class="form-group">
@@ -100,6 +101,5 @@ $(document).ready(function() {
         });
     });
 });
-
 </script>
 <?= $this->endSection() ?>

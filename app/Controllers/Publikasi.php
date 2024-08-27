@@ -13,7 +13,7 @@ class Publikasi extends BaseController
     public function __construct()
     {
         helper('form');
-        $this->ModelPublikasi = new ModelPublikasi;
+        $this->ModelPublikasi = new \App\Models\ModelPublikasi();
         // $this->session = \Config\Services::session();
     }
     
@@ -57,20 +57,6 @@ class Publikasi extends BaseController
         return view('pengajuan_publikasi/ajupublikasi', $data);
     }
 
-    // public function Judulpublikasi()
-    // {
-
-    //     $id_jenispublikasi = $this->request->getPost('id_jenispublikasi');
-    //     dd($id_jenispublikasi);
-    //     $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
-    //     echo '<option value="">--Pilih Judul Publikasi--</option>';
-    //     foreach ($judulpublikasi as $key => $jp) {
-    //         echo "<option value=" . $jp['id'] . ">" . $jp['judul_publikasi_ind'] . "</option>";
-    //     }
-
-    //     return view('ajupublikasi', $judulpublikasi);
-    // }
-
     public function Judulpublikasi($id_jenispublikasi)
     {
         $judulpublikasi = $this->ModelPublikasi->AllJudulpublikasi($id_jenispublikasi);
@@ -83,6 +69,11 @@ class Publikasi extends BaseController
     public function LihatKomentar($id_publikasi)
     {
         $dataKomentar = $this->ModelPublikasi->OneDataKomenter($id_publikasi);
+        
+        foreach ($dataKomentar as &$komentar) {
+            $komentar['replies'] = $this->ModelPublikasi->getRepliesByKomentar($komentar['id_komentar']);
+        }
+        
         $data = [
             'judul' => 'Komentar',
             'page' => 'v_komentar_penyusun',
@@ -93,9 +84,9 @@ class Publikasi extends BaseController
         return view('pengajuan_publikasi/komentar_penyusun', $data);
     }
     
+    
     public function InsertData()
     {
-        var_dump($_POST);
         if ($this->validate([
             'id_jenispublikasi' => [
                 'label' => 'Jenis Publikasi',
@@ -143,13 +134,11 @@ class Publikasi extends BaseController
                 'link_publikasi' => $this->request->getPost('link_publikasi'),
                 'link_spsnrkf' => $this->request->getPost('link_spsnrkf'),
                 'link_spsnres2' => $this->request->getPost('link_spsnres2'),
-                'status' => 1,
-                'flag' => 1,
-                // 'nip_lama' => $this->session->get('nip_lama');
+                'nip_lama' => $this->request->getPost('nip_lama'),  // Save nip_lama
+                'flag' => 5,
             ];
-            // dd($data);
             $this->ModelPublikasi->InsertData($data);
-            session()->setFlashdata('insert', 'Data Berhasil Ditambahkan!!');
+            session()->setFlashdata('insert', 'Data Berhasil Ditambahkan!');
             return redirect()->to(base_url('Publikasi'));
         } else {
             //Jika Tidak Valid
@@ -157,6 +146,7 @@ class Publikasi extends BaseController
             return redirect()->to(base_url('Publikasi/Ajupublikasi'))->withInput('validation', \Config\Services::validation());
         }
     }
+
 
     public function getLink()
     {
@@ -189,21 +179,162 @@ class Publikasi extends BaseController
         echo json_encode($data);
     }
 
-    public function editkomentar()
+    public function editKomentar()
     {
-
-        $id = $this->request->getPost('id');
+        $id_komentar = $this->request->getPost('id_komentar');
+        $catatan = $this->request->getPost('catatan');
+        
         $data = [
-            'judul_publikasi_ind' => $this->request->getPost('judul_publikasi_indonesia'),
-            'judul_publikasi_eng' => $this->request->getPost('judul_publikasi_inggris'),
-            'nama_penyusun' => $this->request->getPost('nama_penyusun'),
-            'frekuensi_terbit' => $this->request->getPost('frekuensi_terbit'),
-            'bahasa' => $this->request->getPost('bahasa'),
-            'katalog' => $this->request->getPost('katalog'),
-            'no_issn' => $this->request->getPost('no_issn')
+            'catatan' => $catatan,
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+        
+        $result = $this->ModelPublikasi->updateKomentar($id_komentar, $data);
+        
+        if ($result) {
+            return $this->response->setJSON(['success' => true]);
+        } else {
+            return $this->response->setJSON(['success' => false]);
+        }
+    }
+
+    public function AddKomentar()
+    {
+        $pemeriksa = session()->get('full_name');
+
+        $data = [
+            'catatan' => $this->request->getPost('catatan'),
+            'id_publikasi' => $this->request->getPost('id_publikasi'),
+            'pemeriksa' => $pemeriksa,
+            'selesai' => 0, // 0 sebagai komentar baru
+            'tgl_komen_admin' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+    
+        $this->ModelPublikasi->addCatatanPemeriksa($data);
+        return redirect()->to(base_url('Publikasi/LihatKomentar/' . $data['id_publikasi']))->with('success', 'Komentar berhasil ditambahkan');
+    }
+
+    public function getStatusOptions()
+    {
+        $model = new \App\Models\ModelPublikasi();
+        $statusOptions = $model->getMstStatusReview();
+        
+        echo json_encode($statusOptions);
+    }
+
+    public function updateStatus()
+    {
+        $id_publikasi = $this->request->getPost('id_publikasi');
+        $status_review = $this->request->getPost('status_review');
+        
+        $result = $this->ModelPublikasi->updateStatus($id_publikasi, ['flag' => $status_review]);
+        
+        if ($result) {
+            return $this->response->setJSON(['success' => true]);
+        } else {
+            return $this->response->setJSON(['success' => false]);
+        }
+    }
+
+    public function deleteKomentar($id_komentar)
+    {
+        if (session()->get('role') == '1') {
+            $this->ModelPublikasi->deleteKomentar($id_komentar);
+            session()->setFlashdata('success', 'Comment deleted successfully.');
+        } else {
+            session()->setFlashdata('error', 'You do not have permission to delete this comment.');
+        }
+    
+        return redirect()->back();
+    }    
+
+    public function deletePublikasi($id_publikasi)
+    {
+        if (session()->get('role') == 1 || session()->get('role') == 4) {
+            $result = $this->ModelPublikasi->deletePublikasi($id_publikasi);
+            if ($result) {
+                return $this->response->setJSON(['success' => true]);
+            } else {
+                return $this->response->setJSON(['success' => false]);
+            }
+        } else {
+            return $this->response->setJSON(['success' => false]);
+        }
+    }
+
+    public function updateLink()
+    {
+        try {
+            if (session()->get('role') != 4) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Unauthorized']);
+            }
+
+            $id = $this->request->getPost('id');
+            $type = $this->request->getPost('type');
+            $newLink = $this->request->getPost('new_link');
+
+            $columnName = 'link_publikasi';
+            if ($type === 'spsnrkf') {
+                $columnName = 'link_spsnrkf';
+            } elseif ($type === 'spsnres2') {
+                $columnName = 'link_spsnres2';
+            }
+
+            $result = $this->ModelPublikasi->updateLink($id, $columnName, $newLink);
+
+            if ($result) {
+                return $this->response->setJSON(['success' => true]);
+            } else {
+                log_message('error', 'Failed to update link. ID: ' . $id . ', Column: ' . $columnName . ', New Link: ' . $newLink);
+                return $this->response->setJSON(['success' => false, 'message' => 'Database update failed']);
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Exception in updateLink: ' . $e->getMessage());
+            return $this->response->setJSON(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
+        }
+    }
+
+    public function addReply()
+    {
+        $pemeriksa = session()->get('full_name');
+
+        $data = [
+            'id_komentar' => $this->request->getPost('id_komentar'),
+            'catatan' => $this->request->getPost('catatan'),
+            'pemeriksa' => $pemeriksa,
+            'tgl_reply' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
         ];
 
-        $this->ModelPublikasi->updateKomentar($id, $data);
-        return redirect()->to(base_url('MasterPublikasi'));
+        $result = $this->ModelPublikasi->addReplyKomentar($data);
+        
+        if ($result) {
+            return $this->response->setJSON(['success' => true]);
+        } else {
+            return $this->response->setJSON(['success' => false]);
+        }
     }
+
+    public function getReplies()
+    {
+        $id_komentar = $this->request->getGet('id_komentar');
+        $replies = $this->ModelPublikasi->getRepliesByKomentar($id_komentar);
+
+        $html = '';
+        foreach ($replies as $reply) {
+            $html .= '<div class="card mt-2">';
+            $html .= '<div class="card-body">';
+            $html .= '<strong>' . $reply['pemeriksa'] . ':</strong>';
+            $html .= '<p>' . $reply['catatan'] . '</p>';
+            $html .= '<small>' . $reply['tgl_reply'] . '</small>';
+            $html .= '</div>';
+            $html .= '</div>';
+        }
+
+        return $this->response->setBody($html);
+    }
+
 }

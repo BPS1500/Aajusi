@@ -36,11 +36,12 @@ class ModelPublikasi extends Model
     public function AllData()
     {
         return $this->db->table('tbl_publikasi')
+            ->select('tbl_publikasi.*, tbl_jenispublikasi.*, tbl_masterpublikasi.judul_publikasi_ind, tbl_fungsi.nama_fungsi, mst_status_review.status_review, mst_status_review.bgcolor')
             ->join('tbl_jenispublikasi', 'tbl_jenispublikasi.id_jenispublikasi = tbl_publikasi.id_jenispublikasi', 'left')
             ->join('tbl_masterpublikasi', 'tbl_masterpublikasi.id = tbl_publikasi.id_judulpublikasi', 'left')
             ->join('tbl_fungsi', 'tbl_fungsi.id_fungsi = tbl_publikasi.id_fungsi', 'left')
-            ->join('mst_status_review e', 'e.id=tbl_publikasi.flag', 'left')
-            ->Get()->getResultArray();
+            ->join('mst_status_review', 'mst_status_review.id = tbl_publikasi.flag', 'left')
+            ->get()->getResultArray();
     }
 
     public function AllJenispublikasi()
@@ -104,10 +105,16 @@ class ModelPublikasi extends Model
         return $this->db->table('tbl_komentar')->where($where)->get()->getFirstRow();
     }
 
-    public function updateKomentar($id, $data)
+    // public function updateKomentar($id, $data)
+    // {
+    //     return $this->db->table('tbl_komentar')->update($data, array('id_komentar' => $id));
+    // }
+    
+    public function updateKomentar($id_komentar, $data)
     {
-        return $this->db->table('tbl_komentar')->update($data, array('id_komentar' => $id));
+        return $this->db->table('tbl_komentar')->where('id_komentar', $id_komentar)->update($data);
     }
+    
 
     public function updateStatus($id, $data)
     {
@@ -172,4 +179,46 @@ class ModelPublikasi extends Model
         $data= array('masterarc'=>$masterArc,'masternonarc'=>$masterNonArc,'arcstatus'=>$arcstatus,'nonarcstatus'=>$nonarcstatus,'arc'=>$arc,'nonarc'=>$nonArc);
         return $data;
     }
+
+    public function deleteKomentar($id_komentar)
+    {
+        $this->db->table('tbl_komentar')->delete(['id_komentar' => $id_komentar]);
+    }
+    
+    public function deletePublikasi($id_publikasi)
+    {
+        return $this->db->table('tbl_publikasi')->delete(['id_publikasi' => $id_publikasi]);
+    }
+
+    public function updateLink($id, $columnName, $newLink)
+    {
+        try {
+            $result = $this->db->table('tbl_publikasi')
+                ->where('id_publikasi', $id)
+                ->update([$columnName => $newLink]);
+    
+            if ($result === false) {
+                log_message('error', 'Database error in updateLink: ' . $this->db->error()['message']);
+            }
+    
+            return $result;
+        } catch (\Exception $e) {
+            log_message('error', 'Exception in updateLink: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function addReplyKomentar($data)
+    {
+        return $this->db->table('tbl_replykomentar')->insert($data);
+    }
+    
+    public function getRepliesByKomentar($id_komentar)
+    {
+        return $this->db->table('tbl_replykomentar')
+            ->where('id_komentar', $id_komentar)
+            ->get()
+            ->getResultArray();
+    }
+    
 }

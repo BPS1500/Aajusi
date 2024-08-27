@@ -58,6 +58,21 @@ $routes->post('masterpublikasi/tambah', 'MasterPublikasi::tambah');
 $routes->post('masterpublikasi/unggahPublikasi', 'MasterPublikasi::unggahPublikasi');
 $routes->post('kelola/masterpublikasi/import', 'MasterPublikasi::unggahPublikasi');
 
+// Routes Komentar
+$routes->post('publikasi/addkomentar', 'Publikasi::AddKomentar');
+
+$routes->post('Publikasi/getStatusOptions', 'Publikasi::getStatusOptions');
+$routes->post('Publikasi/updateStatus', 'Publikasi::updateStatus');
+$routes->post('publikasi/editkomentar', 'Publikasi::editKomentar');
+$routes->post('publikasi/deletekomentar/(:num)', 'Publikasi::deleteKomentar/$1');
+$routes->post('publikasi/updateStatus', 'Publikasi::updateStatus');
+$routes->post('Publikasi/deletePublikasi/(:num)', 'Publikasi::deletePublikasi/$1');
+$routes->post('Publikasi/updateLink', 'Publikasi::updateLink');
+
+$routes->get('Publikasi/getReplies', 'Publikasi::getReplies');
+$routes->post('publikasi/addReply', 'Publikasi::addReply');
+
+
 
 
 
