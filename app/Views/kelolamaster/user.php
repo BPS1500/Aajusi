@@ -53,7 +53,10 @@
                             </td>
                             <td><?= $user['is_active'] ? 'Active' : 'Inactive' ?></td>
                             <td><?= esc($user['created_at']) ?></td>
-                            <td><!-- Add action buttons here --></td>
+                            <td>
+                                <a href="<?= site_url('/kelola/pengguna/edit/' . $user['id']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="<?= site_url('/kelola/pengguna/delete/' . $user['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?');">Hapus</a>
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
