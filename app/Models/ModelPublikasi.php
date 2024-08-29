@@ -220,5 +220,21 @@ class ModelPublikasi extends Model
             ->get()
             ->getResultArray();
     }
+
+    public function deleteCommentWithReplies($id_komentar)
+    {
+        $this->db->transStart(); // Start a transaction
+
+        // Delete replies associated with the comment
+        $this->db->table('tbl_replykomentar')->where('id_komentar', $id_komentar)->delete();
+
+        // Delete the original comment
+        $this->db->table('tbl_komentar')->where('id_komentar', $id_komentar)->delete();
+
+        $this->db->transComplete(); // Complete the transaction
+
+        return $this->db->transStatus(); // Return transaction status
+    }
+
     
 }

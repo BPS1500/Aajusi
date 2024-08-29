@@ -59,9 +59,10 @@
                                             <form action="<?= base_url('publikasi/deletekomentar/' . $value['id_komentar']) ?>" method="post" class="d-inline-block delete-form">
                                                 <?= csrf_field() ?>
                                                 <button type="submit" class="btn btn-sm btn-danger mr-2">
-                                                    <i class="fas fa-trash"></i> Delete
+                                                    <i class="fas fa-trash"></i> Hapus
                                                 </button>
                                             </form>
+
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <button class="btn btn-sm btn-info reply-btn" data-id="<?= $value['id_komentar']; ?>">
