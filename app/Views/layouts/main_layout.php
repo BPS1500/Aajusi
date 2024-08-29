@@ -23,7 +23,31 @@
 
     <!-- Summernote css/js -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <style>
+        /* Change sidebar background color */
+        .main-sidebar {
+            background: rgb(39, 0, 93);
+            background: linear-gradient(180deg, rgba(39, 0, 93, 1) 25%, rgba(112, 0, 201, 1) 80%, rgba(148, 0, 255, 1) 97%); /* Replace with your desired background color */
+        }
 
+        /* Change the sidebar link color */
+        .main-sidebar .nav-link {
+            color: #ffffff !important;
+             /* Replace with your desired text color */
+        }
+
+        /* Change the sidebar link hover color */
+        .main-sidebar .nav-link:hover {
+            background-color: dark purple !important; /* Replace with your desired hover color */
+        }
+
+        /* Active link color */
+        .main-sidebar .nav-link.active {
+            background-color: #4b4b4b !important; /* Replace with your desired active link color */
+        }
+
+
+    </style>
 </head>
 </head>
 

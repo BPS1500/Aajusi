@@ -14,16 +14,16 @@
 <div class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-5 col-6">
                 <div class="small-box bg-success custom-box-size">
                     <div class="inner">
                         <h3><?= $dataDashboard['masterarc'] ?></h3>
                         <table cellspacing="0" cellpadding="0" style="font-size:18px">
                             <thead>
                                 <tr>
-                                    <th width=5%></th>
-                                    <th width=90%></th>
-                                    <th width=5%></th>
+                                    <th width=9%></th>
+                                    <th width=88%></th>
+                                    <th width=6%></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,16 +57,16 @@
                     <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-5 col-6">
                 <div class="small-box bg-warning custom-box-size">
                     <div class="inner">
                         <h3><?= $dataDashboard['masternonarc'] ?></h3>
                         <table cellspacing="0" cellpadding="0" style="font-size:18px">
                             <thead>
                                 <tr>
-                                    <th width=5%></th>
-                                    <th width=90%></th>
-                                    <th width=5%></th>
+                                    <th width=9%></th>
+                                    <th width=88%></th>
+                                    <th width=6%></th>
                                 </tr>
                             </thead>
                             <tbody>
