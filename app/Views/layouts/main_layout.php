@@ -38,22 +38,22 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="<?= base_url('/') ?>" class="brand-link">
-                <img src="<?= base_url('assets/AdminLTE/dist/img/BPSAdminLTELogo.png') ?>" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">AAJUSI BPS</span>
+                <img src="<?= base_url('assets/AdminLTE/dist/img/BPSAdminLTELogo-removebg.png') ?>" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
+                <span class="brand-text text-light font-weight-bold">AAJUSI BPS</span>
             </a>
 
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="<?= base_url('assets/AdminLTE/dist/img/user2-160x160.jpg') ?>" class="img-circle elevation-2" alt="User Image">
+                        <img src="</?= base_url('assets/AdminLTE/dist/img/user2-160x160.jpg') ?>" class="img-circle elevation-2" alt="User Image">
                     </div>
-                    <div class="info">
-                        <a href="#" class="d-block"><?= session()->get('full_name') ?></a>
-                        <p class="d-block text-muted"><?= session()->get('role_name') ?></p>
-                    </div>
-                </div>
+                    <div class="info"> -->
+                        <!-- <a href="#" class="d-block"></?= session()->get('full_name') ?></a>
+                        <p class="d-block text-muted"></?= session()->get('role_name') ?></p> -->
+                    <!-- </div> -->
+                <!-- </div> -->
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">

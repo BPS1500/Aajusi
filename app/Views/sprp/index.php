@@ -54,11 +54,13 @@
                                                class="btn btn-sm btn-warning" title="Edit">
                                                <i class="fas fa-edit"></i>
                                             </a>
+                                            <?php if (empty($sprp['nomor_publikasi'])) : ?>
                                             <a href="<?= base_url('sprp/delete/' . $sprp['id_sprp']) ?>" 
-                                               class="btn btn-sm btn-danger" title="Delete" 
-                                               onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                               <i class="fas fa-trash-alt"></i>
+                                            class="btn btn-sm btn-danger" title="Delete" 
+                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                            <i class="fas fa-trash-alt"></i>
                                             </a>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>

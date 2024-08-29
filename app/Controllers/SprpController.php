@@ -78,25 +78,34 @@ class SprpController extends Controller
     }
 
     public function store()
-    {
-        $model = new SprpModel();
-        $data = [
-            'kodewilayah' => $this->request->getPost('kodewilayah'),
-            'id_kategori' => $this->request->getPost('id_kategori'),
-            'ISBN' => $this->request->getPost('ISBN'),
-            'jml_arab' => $this->request->getPost('jml_arab'),
-            'jml_romawi' => $this->request->getPost('jml_romawi'),
-            'kerjasama_instansi' => $this->request->getPost('kerjasama_instansi'),
-            'id_cover' => $this->request->getPost('id_cover'),
-            'id_orientasi' => $this->request->getPost('id_orientasi'),
-            'id_diterbit' => $this->request->getPost('id_diterbit'),
-            'id_ukuran' => $this->request->getPost('id_ukuran'),
-            'id'=> $this->request->getPost('id')
-        
-        ];
-        $model->insert($data);
-        return redirect()->to('/sprp');
+{
+    $model = new SprpModel();
+    
+    // Get input data
+    $data = [
+        'kodewilayah' => $this->request->getPost('kodewilayah'),
+        'id_kategori' => $this->request->getPost('id_kategori'),
+        'ISBN' => $this->request->getPost('ISBN'),
+        'jml_arab' => $this->request->getPost('jml_arab'),
+        'jml_romawi' => $this->request->getPost('jml_romawi'),
+        'kerjasama_instansi' => $this->request->getPost('kerjasama_instansi'),
+        'id_cover' => $this->request->getPost('id_cover'),
+        'id_orientasi' => $this->request->getPost('id_orientasi'),
+        'id_diterbit' => $this->request->getPost('id_diterbit'),
+        'id_ukuran' => $this->request->getPost('id_ukuran'),
+        'id'=> $this->request->getPost('id'),
+    ];
+
+    // Validation check
+    if (empty($data['kodewilayah']) || empty($data['id_kategori']) || empty($data['id_cover']) || empty($data['id_orientasi']) || empty($data['id_diterbit']) || empty($data['id_ukuran'])) {
+        return redirect()->back()->withInput()->with('error', 'Semua kolom yang ditandai dengan * wajib diisi.');
     }
+    
+    $model->insert($data);
+
+    return redirect()->to('/sprp');
+}
+
 
     public function edit($id_sprp)
     {

@@ -31,11 +31,16 @@ $routes->get('Publikasi/LihatKomentar/(:num)', 'Publikasi::LihatKomentar/$1');
 $routes->get('pengajuan/publikasi', 'Publikasi::index');
 $routes->get('pemeriksaan/publikasi', 'Publikasi::index');
 $routes->post('Publikasi/InsertData', 'Publikasi::InsertData');
+
+//Pemeriksaan
 $routes->get('pemeriksaan/sprp', 'PemeriksaanController::index');
 $routes->get('pemeriksaan/sprp', 'PemeriksaanController::save_no_publikasi/$1');
 $routes->post('pemeriksaan/save_no_publikasi', 'PemeriksaanController::save_no_publikasi');
 $routes->get('pemeriksaan/get_details/(:num)', 'PemeriksaanController::get_details/$1');
+$routes->get('/pemeriksaan/delete/(:num)', 'PemeriksaanController::delete/$1');
 $routes->post('/pemeriksaan/store_nomor_publikasi', 'PemeriksaanController::store_nomor_publikasi');
+$routes->get('/pemeriksaan', 'PemeriksaanController::index');
+$routes->get('pemeriksaan/sprp', 'PemeriksaanController::index');
 // $routes->get('pemeriksaan/pemeriksaan', 'Pemeriksaan::index');
 
 // Routes for SPRP CRUD
