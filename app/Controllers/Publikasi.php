@@ -227,9 +227,9 @@ class Publikasi extends BaseController
     public function updateStatus()
     {
         $id_publikasi = $this->request->getPost('id_publikasi');
-        $selesai = $this->request->getPost('selesai');
+        $selesai = $this->request->getPost('status_review');
         
-        $result = $this->ModelPublikasi->updateStatus($id_publikasi, ['selesai' => $selesai]);
+        $result = $this->ModelPublikasi->updateStatus($id_publikasi, ['status' => $selesai, 'flag' => $selesai]);
         
         if ($result) {
             return $this->response->setJSON(['success' => true]);
