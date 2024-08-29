@@ -240,15 +240,26 @@ class Publikasi extends BaseController
 
     public function deleteKomentar($id_komentar)
     {
-        if (session()->get('role') == '1') {
-            $this->ModelPublikasi->deleteKomentar($id_komentar);
-            session()->setFlashdata('success', 'Comment deleted successfully.');
-        } else {
-            session()->setFlashdata('error', 'You do not have permission to delete this comment.');
+        $db = \Config\Database::connect();
+        $db->transStart(); // Start a transaction
+    
+        // Delete replies first
+        $db->table('tbl_replykomentar')->where('id_komentar', $id_komentar)->delete();
+    
+        // Delete the original comment
+        $db->table('tbl_komentar')->where('id_komentar', $id_komentar)->delete();
+    
+        $db->transComplete(); // Complete the transaction
+    
+        if ($db->transStatus() === FALSE) {
+            // If something went wrong, rollback the transaction
+            $db->transRollback();
+            return redirect()->back()->with('error', 'Failed to delete the comment.');
         }
     
-        return redirect()->back();
-    }    
+        return redirect()->back()->with('success', 'Comment and its replies deleted successfully.');
+    }
+        
 
     public function deletePublikasi($id_publikasi)
     {
