@@ -37,6 +37,7 @@ class Pengguna extends BaseController
         $model = new ModelPengguna();
         $data = [
             'username' => $this->request->getPost('username'),
+            'fullname' => $this->request->getPost('fullname'),
             'email' => $this->request->getPost('email'),
             'nip_lama' => $this->request->getPost('nip_lama'),
             'roles' => json_encode(array_map('intval', $this->request->getPost('roles'))),

@@ -140,7 +140,7 @@
 <script>
 $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
-
+    
     $('.edit-comment').click(function() {
         var id = $(this).data('id');
         var comment = $(this).data('comment');
