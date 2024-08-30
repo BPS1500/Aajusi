@@ -227,9 +227,9 @@ class Publikasi extends BaseController
     public function updateStatus()
     {
         $id_publikasi = $this->request->getPost('id_publikasi');
-        $status_review = $this->request->getPost('status_review');
+        $selesai = $this->request->getPost('status_review');
         
-        $result = $this->ModelPublikasi->updateStatus($id_publikasi, ['flag' => $status_review]);
+        $result = $this->ModelPublikasi->updateStatus($id_publikasi, ['status' => $selesai, 'flag' => $selesai]);
         
         if ($result) {
             return $this->response->setJSON(['success' => true]);
@@ -240,15 +240,26 @@ class Publikasi extends BaseController
 
     public function deleteKomentar($id_komentar)
     {
-        if (session()->get('role') == '1') {
-            $this->ModelPublikasi->deleteKomentar($id_komentar);
-            session()->setFlashdata('success', 'Comment deleted successfully.');
-        } else {
-            session()->setFlashdata('error', 'You do not have permission to delete this comment.');
+        $db = \Config\Database::connect();
+        $db->transStart(); // Start a transaction
+    
+        // Delete replies first
+        $db->table('tbl_replykomentar')->where('id_komentar', $id_komentar)->delete();
+    
+        // Delete the original comment
+        $db->table('tbl_komentar')->where('id_komentar', $id_komentar)->delete();
+    
+        $db->transComplete(); // Complete the transaction
+    
+        if ($db->transStatus() === FALSE) {
+            // If something went wrong, rollback the transaction
+            $db->transRollback();
+            return redirect()->back()->with('error', 'Failed to delete the comment.');
         }
     
-        return redirect()->back();
-    }    
+        return redirect()->back()->with('success', 'Comment and its replies deleted successfully.');
+    }
+        
 
     public function deletePublikasi($id_publikasi)
     {

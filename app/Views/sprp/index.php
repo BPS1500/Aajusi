@@ -8,7 +8,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="card-title mb-0">Data SPRP</h3>
                     <a href="<?= base_url('sprp/create') ?>" class="btn btn-light btn-sm">
-                        <i class="fas fa-plus"></i> Tambah Data
+                        Tambah Data
                     </a>
                 </div>
             </div>
@@ -54,11 +54,13 @@
                                                class="btn btn-sm btn-warning" title="Edit">
                                                <i class="fas fa-edit"></i>
                                             </a>
+                                            <?php if (empty($sprp['nomor_publikasi'])) : ?>
                                             <a href="<?= base_url('sprp/delete/' . $sprp['id_sprp']) ?>" 
-                                               class="btn btn-sm btn-danger" title="Delete" 
-                                               onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                               <i class="fas fa-trash-alt"></i>
+                                            class="btn btn-sm btn-danger" title="Delete" 
+                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                            <i class="fas fa-trash-alt"></i>
                                             </a>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>

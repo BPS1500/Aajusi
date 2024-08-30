@@ -1,13 +1,14 @@
 <?= $this->extend('layouts/main_layout') ?>
 
 <?= $this->section('content') ?>
-<div class="col-md-12">
-    <div class="card">
-        <div class="card-header row">
-            <div class="col-md-10">
-                <h3 class="card-title"><?= $judul ?></h3>
+<div class="container-fluid mt-5">
+    <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0"><?= $judul ?></h3>
+                    <a href="<?= base_url('Publikasi/ajupublikasi') ?>" class="btn btn-light btn-sm"></i> Ajukan Publikasi</a>
+                </div>
             </div>
-            <a href="<?= base_url('Publikasi/ajupublikasi') ?>" class="btn btn-primary btn-sm"> Ajukan Publikasi </i></a>
         </div>
 
         <!-- /.card-header -->
@@ -21,7 +22,7 @@
             ?>
 
             <table id="tabel_publikasi" class="table-bordered table-hover">
-                <thead class=" table table-primary align-middle" style="text-align: center;">
+                <thead  class="table table-striped table-bordered" style="text-align: center;">
                     <tr>
                         <th style="width: 10px">No</th>
                         <th>Jenis</th>
@@ -100,6 +101,7 @@
                     <?php  } ?>
                 </tbody>
             </table>
+        </div>
         </div>
     </div>
 </div>

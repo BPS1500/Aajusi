@@ -40,13 +40,14 @@
                                                 data-status="<?= $value['selesai'] == '1' ? 'sudah_sesuai' : 'belum_sesuai' ?>" 
                                                 title="<?= $value['selesai'] == '1' ? 'Sudah Sesuai' : 'Belum Sesuai' ?>"></span>
                                         </label>
-                                    <?php elseif (in_array(session()->get('role'), [2, 4])) : ?>
-                                        <button class="btn btn-sm btn-<?= $value['selesai'] == '1' ? 'success' : 'warning' ?> mr-2 status-btn" 
-                                            data-id="<?= $value['id_komentar']; ?>" 
-                                            data-status="<?= $value['selesai']; ?>">
-                                            <?= $value['selesai'] == '1' ? 'Sesuai' : 'Belum Sesuai' ?>
-                                        </button>
-                                    <?php endif; ?>
+                                        <?php elseif (in_array(session()->get('role'), [2, 4])) : ?>
+                                            <button class="btn btn-sm btn-<?= $value['selesai'] == '1' ? 'success' : 'warning' ?> mr-2 status-btn <?= session()->get('role') == '4' ? 'inactive' : '' ?>" 
+                                                data-id="<?= $value['id_komentar']; ?>" 
+                                                data-status="<?= $value['selesai']; ?>"
+                                                <?= session()->get('role') == '4' ? 'aria-disabled="true"' : '' ?>>
+                                                <?= $value['selesai'] == '1' ? 'Sesuai' : 'Belum Sesuai' ?>
+                                            </button>
+                                        <?php endif; ?>
 
                                     <?php if ($value['pemeriksa'] == session()->get('full_name')) : ?>
                                         <?php if (in_array(session()->get('role'), [1, 3])) : ?>
@@ -58,9 +59,10 @@
                                             <form action="<?= base_url('publikasi/deletekomentar/' . $value['id_komentar']) ?>" method="post" class="d-inline-block delete-form">
                                                 <?= csrf_field() ?>
                                                 <button type="submit" class="btn btn-sm btn-danger mr-2">
-                                                    <i class="fas fa-trash"></i> Delete
+                                                    <i class="fas fa-trash"></i> Hapus
                                                 </button>
                                             </form>
+
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <button class="btn btn-sm btn-info reply-btn" data-id="<?= $value['id_komentar']; ?>">
@@ -139,7 +141,7 @@
 <script>
 $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
-
+    
     $('.edit-comment').click(function() {
         var id = $(this).data('id');
         var comment = $(this).data('comment');
@@ -199,6 +201,8 @@ $(document).ready(function() {
     });
 
     $('.status-btn').click(function() {
+        if ($(this).hasClass('inactive')) return;
+
         var id = $(this).data('id');
         var status = $(this).data('status');
         var newStatus = status == 1 ? 0 : 1;

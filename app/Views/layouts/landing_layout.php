@@ -88,6 +88,7 @@
         <div class="container footer-top">
             <div class="row gy-4">
                 <div class="col-lg-4 col-md-6 footer-about">
+                    
                 </div>
             </div>
         </div>
