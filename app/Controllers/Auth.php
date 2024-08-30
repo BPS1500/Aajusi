@@ -10,7 +10,7 @@ class Auth extends Controller
 {
     public function login()
     {
-        return redirect()->to('https://bpsjambi.online/sso/public/login?redirect_url=' . urlencode(base_url('auth/ssoCallback')));
+        return redirect()->to('https://bpsjambi.id/sso/public/login?redirect_url=' . urlencode(base_url('auth/ssoCallback')));
     }
 
     public function ssoCallback()
@@ -29,7 +29,7 @@ class Auth extends Controller
     private function validateToken($token)
     {
         $secret_key = 'rahasianegara!';
-        $url = 'https://bpsjambi.online/sso/public/auth/validate-token';
+        $url = 'https://bpsjambi.id/sso/public/auth/validate-token';
 
         $postData = http_build_query([
             'token' => $token,
@@ -113,7 +113,7 @@ class Auth extends Controller
         $session->destroy();
 
         // Destroy session SSO
-        $url = 'https://bpsjambi.online/sso/public/logout?redirect_url=' . base_url();
+        $url = 'https://bpsjambi.id/sso/public/logout?redirect_url=' . base_url();
 
         return redirect()->to($url)->with('urlcallback', base_url());
     }
