@@ -74,4 +74,12 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     $routes->get('Publikasi/getReplies', 'Publikasi::getReplies');
     $routes->post('publikasi/addReply', 'Publikasi::addReply');
+
+    // Routes Kelola Pengguna
+    $routes->get('/kelola/peranpengguna', 'Pengguna::index');
+    $routes->get('kelola/create', 'Pengguna::createUser');
+    $routes->post('/kelola/pengguna/store', 'Pengguna::storeUser');
+    $routes->get('/kelola/pengguna/edit/(:num)', 'Pengguna::editUser/$1');
+    $routes->post('/kelola/pengguna/update/(:num)', 'Pengguna::updateUser/$1');
+    $routes->get('/kelola/pengguna/delete/(:num)', 'Pengguna::deleteUser/$1');
 });
