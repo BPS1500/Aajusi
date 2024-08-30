@@ -9,7 +9,7 @@ class Home extends Controller
     public function index()
     {
         // Render view home.php
-        return view('home', [
+        return view('layouts/landing_layout', [
             'title' => 'Aajusi - Portal Publikasi BPS Provinsi Jambi'
         ]);
     }
