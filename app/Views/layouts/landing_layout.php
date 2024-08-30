@@ -7,8 +7,8 @@
     <title><?= $title ?? 'SiNanTI - Sistem Layanan TI'; ?></title>
 
     <!-- Favicons -->
-    <link href="<?= base_url('assets/Bikin/assets/')?>img/favicon.png" rel="icon">
-    <link href="<?= base_url('assets/Bikin/assets/')?>img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="<?= base_url('assets/Bikin/assets/') ?>img/favicon.png" rel="icon">
+    <link href="<?= base_url('assets/Bikin/assets/') ?>img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -71,13 +71,13 @@
 
     <main class="main">
         <!-- Hero Section -->
-        <section id="hero" class="hero section"  style="margin-top: -100px;">
+        <section id="hero" class="hero section" style="margin-top: -100px;">
             <div class="container d-flex flex-column justify-content-center align-items-center text-center position-relative" data-aos="zoom-out">
-                <img src="assets/Bikin/assets/img/hero-img.png" class="img-fluid animated" alt="">
+                <img src="<?php echo base_url() ?>assets/Bikin/assets/img/hero-img.png" class="img-fluid animated" alt="">
                 <h1>Selamat datang di <span>AAJUSI</span></h1>
                 <p>Aplikasi Pengajuan Publikasi BPS Provinsi Jambi</p>
                 <div class="d-flex">
-                    <a href="./login" class="btn-get-started scrollto">Mulai Sekarang</a>
+                    <a href="<?php echo base_url('login') ?>" class="btn-get-started scrollto">Mulai Sekarang</a>
                 </div>
             </div>
         </section>
@@ -88,7 +88,7 @@
         <div class="container footer-top">
             <div class="row gy-4">
                 <div class="col-lg-4 col-md-6 footer-about">
-                    
+
                 </div>
             </div>
         </div>
@@ -101,23 +101,23 @@
         </div>
     </footer>
 
-<!-- Scroll Top -->
-<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-<!-- Preloader -->
-<div id="preloader"></div>
+    <!-- Preloader -->
+    <div id="preloader"></div>
 
-<!-- Vendor JS Files -->
-<script src="<?= base_url('assets/Bikin/assets/') ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="<?= base_url('assets/Bikin/assets/') ?>vendor/php-email-form/validate.js"></script>
-<script src="<?= base_url('assets/Bikin/assets/') ?>vendor/aos/aos.js"></script>
-<script src="<?= base_url('assets/Bikin/assets/') ?>vendor/glightbox/js/glightbox.min.js"></script>
-<script src="<?= base_url('assets/Bikin/assets/') ?>vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-<script src="<?= base_url('assets/Bikin/assets/') ?>vendor/isotope-layout/isotope.pkgd.min.js"></script>
-<script src="<?= base_url('assets/Bikin/assets/') ?>vendor/swiper/swiper-bundle.min.js"></script>
+    <!-- Vendor JS Files -->
+    <script src="<?= base_url('assets/Bikin/assets/') ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= base_url('assets/Bikin/assets/') ?>vendor/php-email-form/validate.js"></script>
+    <script src="<?= base_url('assets/Bikin/assets/') ?>vendor/aos/aos.js"></script>
+    <script src="<?= base_url('assets/Bikin/assets/') ?>vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="<?= base_url('assets/Bikin/assets/') ?>vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="<?= base_url('assets/Bikin/assets/') ?>vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="<?= base_url('assets/Bikin/assets/') ?>vendor/swiper/swiper-bundle.min.js"></script>
 
-<!-- Main JS File -->
-<script src="<?= base_url('assets/BIkin/assets/') ?>js/main.js"></script>
+    <!-- Main JS File -->
+    <script src="<?= base_url('assets/Bikin/assets/') ?>js/main.js"></script>
 
 </body>
 
