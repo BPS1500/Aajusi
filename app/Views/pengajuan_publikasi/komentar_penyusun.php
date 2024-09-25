@@ -29,25 +29,35 @@
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h5 class="mb-0">
                                     <?= $value['pemeriksa'] ?>
-                                    <small class="text-muted"><?= $value['tgl_komen_admin'] ?></small>
+
+                                    <?php
+                                    $utckomen = $value['tgl_komen_admin'];
+                                    // Buat objek DateTime dengan waktu UTC
+                                    $komentimejakarta = new DateTime($utckomen, new DateTimeZone('UTC'));
+
+                                    // Ubah timezone ke Asia/Jakarta (UTC+7)
+                                    $komentimejakarta->setTimezone(new DateTimeZone('Asia/Jakarta'));
+
+                                    ?>
+                                    <small class="text-muted"><?= $komentimejakarta ?></small>
                                 </h5>
                                 <div>
                                     <?php if (in_array(session()->get('role'), [1, 3])) : ?>
                                         <label class="switch mr-2">
                                             <input type="checkbox" class="toggle-status" data-id="<?= $value['id_komentar']; ?>" <?= $value['selesai'] == '1' ? 'checked' : '' ?>>
-                                            <span class="slider round" 
-                                                data-toggle="tooltip" 
-                                                data-status="<?= $value['selesai'] == '1' ? 'sudah_sesuai' : 'belum_sesuai' ?>" 
+                                            <span class="slider round"
+                                                data-toggle="tooltip"
+                                                data-status="<?= $value['selesai'] == '1' ? 'sudah_sesuai' : 'belum_sesuai' ?>"
                                                 title="<?= $value['selesai'] == '1' ? 'Sudah Sesuai' : 'Belum Sesuai' ?>"></span>
                                         </label>
-                                        <?php elseif (in_array(session()->get('role'), [2, 4])) : ?>
-                                            <button class="btn btn-sm btn-<?= $value['selesai'] == '1' ? 'success' : 'warning' ?> mr-2 status-btn <?= session()->get('role') == '4' ? 'inactive' : '' ?>" 
-                                                data-id="<?= $value['id_komentar']; ?>" 
-                                                data-status="<?= $value['selesai']; ?>"
-                                                <?= session()->get('role') == '4' ? 'aria-disabled="true"' : '' ?>>
-                                                <?= $value['selesai'] == '1' ? 'Sesuai' : 'Belum Sesuai' ?>
-                                            </button>
-                                        <?php endif; ?>
+                                    <?php elseif (in_array(session()->get('role'), [2, 4])) : ?>
+                                        <button class="btn btn-sm btn-<?= $value['selesai'] == '1' ? 'success' : 'warning' ?> mr-2 status-btn <?= session()->get('role') == '4' ? 'inactive' : '' ?>"
+                                            data-id="<?= $value['id_komentar']; ?>"
+                                            data-status="<?= $value['selesai']; ?>"
+                                            <?= session()->get('role') == '4' ? 'aria-disabled="true"' : '' ?>>
+                                            <?= $value['selesai'] == '1' ? 'Sesuai' : 'Belum Sesuai' ?>
+                                        </button>
+                                    <?php endif; ?>
 
                                     <?php if ($value['pemeriksa'] == session()->get('full_name')) : ?>
                                         <?php if (in_array(session()->get('role'), [1, 3])) : ?>
@@ -139,232 +149,232 @@
 
 
 <script>
-$(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-    
-    $('.edit-comment').click(function() {
-        var id = $(this).data('id');
-        var comment = $(this).data('comment');
-        $('#edit_comment_id').val(id);
-        $('#summernote-edit').summernote('code', comment);
-        $('#editCommentModal').modal('show');
-    });
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
 
-    $('#saveEditComment').click(function() {
-        var id = $('#edit_comment_id').val();
-        var comment = $('#summernote-edit').summernote('code');
-
-        $.ajax({
-            url: '<?= base_url('publikasi/editkomentar') ?>',
-            type: 'POST',
-            data: {
-                id_komentar: id,
-                catatan: comment,
-                <?= csrf_token() ?>: '<?= csrf_hash() ?>'
-            },
-            success: function(response) {
-                $('#editCommentModal').modal('hide');
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
+        $('.edit-comment').click(function() {
+            var id = $(this).data('id');
+            var comment = $(this).data('comment');
+            $('#edit_comment_id').val(id);
+            $('#summernote-edit').summernote('code', comment);
+            $('#editCommentModal').modal('show');
         });
-    });
 
-    $('.toggle-status').change(function() {
-        var id = $(this).data('id');
-        var status = $(this).is(':checked') ? 1 : 0;
-        var newStatus = status === 1 ? 'sudah_sesuai' : 'belum_sesuai';
-        var newTitle = status === 1 ? 'Sudah Sesuai' : 'Belum Sesuai';
+        $('#saveEditComment').click(function() {
+            var id = $('#edit_comment_id').val();
+            var comment = $('#summernote-edit').summernote('code');
 
-        var slider = $(this).siblings('.slider');
-        slider.attr('data-status', newStatus);
-        slider.attr('title', newTitle);
-
-        slider.tooltip('dispose').tooltip();
-
-        $.ajax({
-            url: '<?= base_url('publikasi/updateStatus') ?>',
-            type: 'POST',
-            data: {
-                id_komentar: id,
-                selesai: status,
-                <?= csrf_token() ?>: '<?= csrf_hash() ?>'
-            },
-            success: function(response) {
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
+            $.ajax({
+                url: '<?= base_url('publikasi/editkomentar') ?>',
+                type: 'POST',
+                data: {
+                    id_komentar: id,
+                    catatan: comment,
+                    <?= csrf_token() ?>: '<?= csrf_hash() ?>'
+                },
+                success: function(response) {
+                    $('#editCommentModal').modal('hide');
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
         });
-    });
 
-    $('.status-btn').click(function() {
-        if ($(this).hasClass('inactive')) return;
+        $('.toggle-status').change(function() {
+            var id = $(this).data('id');
+            var status = $(this).is(':checked') ? 1 : 0;
+            var newStatus = status === 1 ? 'sudah_sesuai' : 'belum_sesuai';
+            var newTitle = status === 1 ? 'Sudah Sesuai' : 'Belum Sesuai';
 
-        var id = $(this).data('id');
-        var status = $(this).data('status');
-        var newStatus = status == 1 ? 0 : 1;
-        var newLabel = newStatus == 1 ? 'Sesuai' : 'Belum Sesuai';
-        var newClass = newStatus == 1 ? 'btn-success' : 'btn-warning';
+            var slider = $(this).siblings('.slider');
+            slider.attr('data-status', newStatus);
+            slider.attr('title', newTitle);
 
-        $(this).data('status', newStatus);
-        $(this).removeClass('btn-success btn-warning').addClass(newClass);
-        $(this).text(newLabel);
+            slider.tooltip('dispose').tooltip();
 
-        $.ajax({
-            url: '<?= base_url('publikasi/updateStatus') ?>',
-            type: 'POST',
-            data: {
-                id_komentar: id,
-                selesai: newStatus,
-                <?= csrf_token() ?>: '<?= csrf_hash() ?>'
-            },
-            success: function(response) {
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
+            $.ajax({
+                url: '<?= base_url('publikasi/updateStatus') ?>',
+                type: 'POST',
+                data: {
+                    id_komentar: id,
+                    selesai: status,
+                    <?= csrf_token() ?>: '<?= csrf_hash() ?>'
+                },
+                success: function(response) {},
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
         });
-    });
 
-    $('form.delete-form').submit(function(e) {
-        e.preventDefault();
+        $('.status-btn').click(function() {
+            if ($(this).hasClass('inactive')) return;
 
-        var form = $(this);
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Komentar Anda akan dihapus!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya',
-            cancelButtonText: 'Batalkan',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.off('submit').submit();
-            }
+            var id = $(this).data('id');
+            var status = $(this).data('status');
+            var newStatus = status == 1 ? 0 : 1;
+            var newLabel = newStatus == 1 ? 'Sesuai' : 'Belum Sesuai';
+            var newClass = newStatus == 1 ? 'btn-success' : 'btn-warning';
+
+            $(this).data('status', newStatus);
+            $(this).removeClass('btn-success btn-warning').addClass(newClass);
+            $(this).text(newLabel);
+
+            $.ajax({
+                url: '<?= base_url('publikasi/updateStatus') ?>',
+                type: 'POST',
+                data: {
+                    id_komentar: id,
+                    selesai: newStatus,
+                    <?= csrf_token() ?>: '<?= csrf_hash() ?>'
+                },
+                success: function(response) {},
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
         });
-    });
 
-    $('.reply-btn').click(function() {
-        var id = $(this).data('id');
-        var replyFormContainer = $(this).closest('.comment-thread').find('.reply-form-container');
-        
-        $('.reply-form-container').not(replyFormContainer).hide();
-        
-        replyFormContainer.toggle();
-    });
+        $('form.delete-form').submit(function(e) {
+            e.preventDefault();
 
-    $('.reply-form').submit(function(e) {
-        e.preventDefault();
-        var form = $(this);
-        var id_komentar = form.data('id');
-        
-        $.ajax({
-            url: '<?= base_url('publikasi/addReply') ?>',
-            type: 'POST',
-            data: form.serialize(),
-            success: function(response) {
-                form.find('textarea').val('');
-                form.parent().hide();
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
+            var form = $(this);
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Komentar Anda akan dihapus!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batalkan',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.off('submit').submit();
+                }
+            });
         });
-    });
 
-    function refreshReplies(id_komentar) {
-        $.ajax({
-            url: '<?= base_url('publikasi/getReplies') ?>',
-            type: 'GET',
-            data: { id_komentar: id_komentar },
-            success: function(response) {
-                $('#replies_' + id_komentar).html(response);
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
+        $('.reply-btn').click(function() {
+            var id = $(this).data('id');
+            var replyFormContainer = $(this).closest('.comment-thread').find('.reply-form-container');
+
+            $('.reply-form-container').not(replyFormContainer).hide();
+
+            replyFormContainer.toggle();
         });
-    }
-});
+
+        $('.reply-form').submit(function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var id_komentar = form.data('id');
+
+            $.ajax({
+                url: '<?= base_url('publikasi/addReply') ?>',
+                type: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    form.find('textarea').val('');
+                    form.parent().hide();
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        function refreshReplies(id_komentar) {
+            $.ajax({
+                url: '<?= base_url('publikasi/getReplies') ?>',
+                type: 'GET',
+                data: {
+                    id_komentar: id_komentar
+                },
+                success: function(response) {
+                    $('#replies_' + id_komentar).html(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    });
 </script>
 
 <style>
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 34px;
-    height: 20px;
-}
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 34px;
+        height: 20px;
+    }
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 20px;
-}
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 20px;
+    }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-}
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 12px;
+        width: 12px;
+        border-radius: 50%;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+    }
 
-input:checked + .slider {
-    background-color: #2196F3;
-}
+    input:checked+.slider {
+        background-color: #2196F3;
+    }
 
-input:checked + .slider:before {
-    transform: translateX(14px);
-}
+    input:checked+.slider:before {
+        transform: translateX(14px);
+    }
 
-.slider.round {
-    border-radius: 20px;
-}
+    .slider.round {
+        border-radius: 20px;
+    }
 
-.slider.round:before {
-    border-radius: 50%;
-}
+    .slider.round:before {
+        border-radius: 50%;
+    }
 
-.comment-thread {
-    border-left: 2px solid #007bff;
-    padding-left: 15px;
-}
+    .comment-thread {
+        border-left: 2px solid #007bff;
+        padding-left: 15px;
+    }
 
-.comment-main {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-}
+    .comment-main {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+    }
 
-.replies {
-    margin-left: 20px;
-}
+    .replies {
+        margin-left: 20px;
+    }
 
-.reply {
-    border: 1px solid #e9ecef;
-}
+    .reply {
+        border: 1px solid #e9ecef;
+    }
 </style>
 
 
