@@ -39,7 +39,7 @@
                                     $komentimejakarta->setTimezone(new DateTimeZone('Asia/Jakarta'));
 
                                     ?>
-                                    <small class="text-muted"><?= $komentimejakarta ?></small>
+                                    <small class="text-muted"><?= $komentimejakarta->format('Y-m-d H:i:s') ?></small>
                                 </h5>
                                 <div>
                                     <?php if (in_array(session()->get('role'), [1, 3])) : ?>
