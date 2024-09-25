@@ -29,17 +29,7 @@
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h5 class="mb-0">
                                     <?= $value['pemeriksa'] ?>
-
-                                    <?php
-                                    $utckomen = $value['tgl_komen_admin'];
-                                    // Buat objek DateTime dengan waktu UTC
-                                    $komentimejakarta = new DateTime($utckomen, new DateTimeZone('UTC'));
-
-                                    // Ubah timezone ke Asia/Jakarta (UTC+7)
-                                    $komentimejakarta->setTimezone(new DateTimeZone('Asia/Jakarta'));
-
-                                    ?>
-                                    <small class="text-muted"><?= $komentimejakarta->format('Y-m-d H:i:s') ?></small>
+                                    <small class="text-muted"><?= $value['tgl_komen_admin'] ?></small>
                                 </h5>
                                 <div>
                                     <?php if (in_array(session()->get('role'), [1, 3])) : ?>
@@ -92,15 +82,7 @@
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <h6 class="mb-0">
                                                 <?= $reply['pemeriksa'] ?>
-                                                <?php
-                                                $utcreply = $reply['tgl_reply'];
-                                                // Buat objek DateTime dengan waktu UTC
-                                                $replytimejakarta = new DateTime($utcreply, new DateTimeZone('UTC'));
-
-                                                // Ubah timezone ke Asia/Jakarta (UTC+7)
-                                                $replytimejakarta->setTimezone(new DateTimeZone('Asia/Jakarta'));
-                                                ?>
-                                                <small class="text-muted"><?= $replytimejakarta->format('Y-m-d H:i:s') ?></small>
+                                                <small class="text-muted"><?= $reply['tgl_reply'] ?></small>
                                             </h6>
                                         </div>
                                         <div class="reply-content">
