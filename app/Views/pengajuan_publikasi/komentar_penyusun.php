@@ -92,7 +92,15 @@
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <h6 class="mb-0">
                                                 <?= $reply['pemeriksa'] ?>
-                                                <small class="text-muted"><?= $reply['tgl_reply'] ?></small>
+                                                <?php
+                                                $utcreply = $value['tgl_reply'];
+                                                // Buat objek DateTime dengan waktu UTC
+                                                $replytimejakarta = new DateTime($utcreply, new DateTimeZone('UTC'));
+
+                                                // Ubah timezone ke Asia/Jakarta (UTC+7)
+                                                $replytimejakarta->setTimezone(new DateTimeZone('Asia/Jakarta'));
+                                                ?>
+                                                <small class="text-muted"><?= $replytimejakarta->format('Y-m-d H:i:s') ?></small>
                                             </h6>
                                         </div>
                                         <div class="reply-content">
