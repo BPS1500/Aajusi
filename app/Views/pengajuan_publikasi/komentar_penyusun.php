@@ -93,7 +93,7 @@
                                             <h6 class="mb-0">
                                                 <?= $reply['pemeriksa'] ?>
                                                 <?php
-                                                $utcreply = $value['tgl_reply'];
+                                                $utcreply = $reply['tgl_reply'];
                                                 // Buat objek DateTime dengan waktu UTC
                                                 $replytimejakarta = new DateTime($utcreply, new DateTimeZone('UTC'));
 
