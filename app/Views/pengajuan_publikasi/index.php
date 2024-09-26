@@ -51,7 +51,6 @@
 
                         <td>
                             <?php if (session()->get('role') == 4): ?>
-                                <?php if($value['nip_lama']== session()->get('nip_lama')|| $value['nip_lama']==null){ ?>
                                 <button class="btn btn-primary update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="publikasi" data-tautan="<?= $value['link_publikasi'] ?>" data-toggle="modal" data-target="#updateLinkModal"><i class="fas fa-book"></i></button>
                                 <?php if ($value['link_spsnrkf'] != null): ?>
                                     <button class="btn btn-secondary update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="spsnrkf" data-toggle="modal" data-tautan="<?= $value['link_spsnrkf'] ?>" data-target="#updateLinkModal"><i class="fas fa-file-signature"></i></button>
@@ -59,18 +58,14 @@
                                 <?php if ($value['link_spsnres2'] != null): ?>
                                     <button class="btn btn-success update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="spsnres2" data-toggle="modal" data-tautan="<?= $value['link_spsnres2'] ?>" data-target="#updateLinkModal"><i class="fas fa-file-signature"></i></button>
                                 <?php endif; ?>
-
-                                <?php } else{ ?>
-                                    <a class="btn btn-primary" href="<?= $value['link_publikasi'] ?>" target="_blank"><i class="fas fa-book"></i></a>
+                            <?php else: ?>
+                                <a class="btn btn-primary" href="<?= $value['link_publikasi'] ?>" target="_blank"><i class="fas fa-book"></i></a>
                                 <?php if ($value['link_spsnrkf'] != null): ?>
                                     <a class="btn btn-secondary" href="<?= $value['link_spsnrkf'] ?>" target="_blank"><i class="fas fa-file-signature"></i></a>
                                 <?php endif; ?>
                                 <?php if ($value['link_spsnres2'] != null): ?>
                                     <a class="btn btn-success" href="<?= $value['link_spsnres2'] ?>" target="_blank"><i class="fas fa-file-signature"></i></a>
-                                
-                                    <?php } ?>
-                            
-                                
+                                <?php endif; ?>
                             <?php endif; ?>
                         </td>
 
