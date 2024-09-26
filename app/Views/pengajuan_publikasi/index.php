@@ -295,7 +295,9 @@
             var id = $('#publikasi_id').val();
             var type = $('#link_type').val();
             var newLink = $('#new_link').val();
-
+            alert(id);
+            alert(type);
+            alert(newLink);
             $.ajax({
                 url: '<?= base_url('Publikasi/updateLink') ?>',
                 method: 'POST',
