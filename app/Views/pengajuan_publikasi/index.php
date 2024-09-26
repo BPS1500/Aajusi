@@ -307,7 +307,7 @@
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-
+                        alert(newLink);
                         $('#updateLinkModal').modal('hide');
                         if (type === 'publikasi') {
                             row.find('.btn-primary').attr('href', newLink);
