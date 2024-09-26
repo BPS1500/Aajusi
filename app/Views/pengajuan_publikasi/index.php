@@ -323,6 +323,8 @@
                             icon: "success"
                         });
 
+                        location.reload();
+
 
                     } else {
                         alert('Gagal memperbarui tautan');
