@@ -50,13 +50,13 @@
                         <td><?= $value['tgl_repisi'] ? date('d-m-Y', strtotime($value['tgl_repisi'])) : '-' ?></td>
 
                         <td>
-                            <?php if (session()->get('role') == 99): ?>
-                                <button class="btn btn-primary update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="publikasi" data-toggle="modal" data-target="#updateLinkModal"><i class="fas fa-book"></i></button>
+                            <?php if (session()->get('role') == 4): ?>
+                                <button class="btn btn-primary update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="publikasi" data-tautan="<?= $value['link_publikasi'] ?>" data-toggle="modal" data-target="#updateLinkModal"><i class="fas fa-book"></i></button>
                                 <?php if ($value['link_spsnrkf'] != null): ?>
-                                    <button class="btn btn-secondary update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="spsnrkf" data-toggle="modal" data-target="#updateLinkModal"><i class="fas fa-file-signature"></i></button>
+                                    <button class="btn btn-secondary update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="spsnrkf" data-toggle="modal" data-tautan="<?= $value['link_spsnrkf'] ?>" data-target="#updateLinkModal"><i class="fas fa-file-signature"></i></button>
                                 <?php endif; ?>
                                 <?php if ($value['link_spsnres2'] != null): ?>
-                                    <button class="btn btn-success update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="spsnres2" data-toggle="modal" data-target="#updateLinkModal"><i class="fas fa-file-signature"></i></button>
+                                    <button class="btn btn-success update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="spsnres2" data-toggle="modal" data-tautan="<?= $value['link_spsnres2'] ?>" data-target="#updateLinkModal"><i class="fas fa-file-signature"></i></button>
                                 <?php endif; ?>
                             <?php else: ?>
                                 <a class="btn btn-primary" href="<?= $value['link_publikasi'] ?>" target="_blank"><i class="fas fa-book"></i></a>
@@ -72,18 +72,6 @@
                         <td class="status <?= $value['bgcolor']; ?>"><?= $value['status_review']; ?></td>
 
                         <td style="text-align: center;" align=center>
-                            <?php if (session()->get('role') == 4): ?>
-                                <button class="btn btn-primary update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="publikasi" data-toggle="modal" data-target="#updateLinkModal"><i class="fas fa-book"></i></button>
-                                <?php if ($value['link_spsnrkf'] != null): ?>
-                                    <button class="btn btn-secondary update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="spsnrkf" data-toggle="modal" data-target="#updateLinkModal"><i class="fas fa-file-signature"></i></button>
-                                <?php endif; ?>
-                                <?php if ($value['link_spsnres2'] != null): ?>
-                                    <button class="btn btn-success update-link" data-id="<?= $value['id_publikasi'] ?>" data-type="spsnres2" data-toggle="modal" data-target="#updateLinkModal"><i class="fas fa-file-signature"></i></button>
-                                <?php endif; ?>
-                            <?php else: ?>
-
-                            <?php endif; ?>
-
                             <a href="<?= base_url('Publikasi/LihatKomentar') ?>/<?= $value['id_publikasi'] ?>" class="btn btn-primary btn-sm ubah" data-data="<?= $value['id_publikasi'] ?>"
                                 data-toggle="tooltip" data-placement="top" title="Lihat Komentar">
                                 <i class="fas fa-comment"></i>
@@ -283,6 +271,7 @@
         $('.update-link').on('click', function() {
             var id = $(this).data('id');
             var type = $(this).data('type');
+            var tautan = $(this).data('tautan');
             var currentLink = '';
 
             var modalTitle = 'Perbarui Tautan ';
@@ -300,7 +289,7 @@
             $('#updateLinkModalLabel').text(modalTitle);
             $('#publikasi_id').val(id);
             $('#link_type').val(type);
-            $('#new_link').val(currentLink);
+            $('#new_link').val(tautan);
         });
 
         $('#saveLink').on('click', function() {
@@ -321,13 +310,13 @@
                     if (response.success) {
 
                         $('#updateLinkModal').modal('hide');
-                        if (type === 'publikasi') {
-                            row.find('.btn-primary').attr('href', newLink);
-                        } else if (type === 'spsnrkf') {
-                            row.find('.btn-secondary').attr('href', newLink);
-                        } else if (type === 'spsnres2') {
-                            row.find('.btn-success').attr('href', newLink);
-                        }
+                        // if (type === 'publikasi') {
+                        //     row.find('.btn-primary').attr('href', newLink);
+                        // } else if (type === 'spsnrkf') {
+                        //     row.find('.btn-secondary').attr('href', newLink);
+                        // } else if (type === 'spsnres2') {
+                        //     row.find('.btn-success').attr('href', newLink);
+                        // }
                         Swal.fire({
                             title: "Berhasil!",
                             text: "Tautan sudah diperbarui",
