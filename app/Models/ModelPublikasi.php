@@ -25,11 +25,12 @@ class ModelPublikasi extends Model
         }
     }
 
-    public function getMstStatusReview($id=null){
-        if($id==null){
+    public function getMstStatusReview($id = null)
+    {
+        if ($id == null) {
             return $this->db->table('mst_status_review')->Get()->getResultArray();
-        } else{
-            return $this->db->table('mst_status_review')->where(['id'=>$id])->Get()->getResultArray();
+        } else {
+            return $this->db->table('mst_status_review')->where(['id' => $id])->Get()->getResultArray();
         }
     }
 
@@ -61,7 +62,7 @@ class ModelPublikasi extends Model
     {
         return count($this->db->table('tbl_publikasi')
             ->where('id_jenispublikasi', 2)
-            -> get()->getResultArray());
+            ->get()->getResultArray());
     }
 
     public function AllJudulpublikasi($id_jenispublikasi)
@@ -109,12 +110,12 @@ class ModelPublikasi extends Model
     // {
     //     return $this->db->table('tbl_komentar')->update($data, array('id_komentar' => $id));
     // }
-    
+
     public function updateKomentar($id_komentar, $data)
     {
         return $this->db->table('tbl_komentar')->where('id_komentar', $id_komentar)->update($data);
     }
-    
+
 
     public function updateStatus($id, $data)
     {
@@ -145,15 +146,13 @@ class ModelPublikasi extends Model
 
     public function getPublikasibyStatus($status)
     {
-        return $this->db->table('tbl_publikasi')->where('flag',$status)->get()->getResultArray();
-
+        return $this->db->table('tbl_publikasi')->where('flag', $status)->get()->getResultArray();
     }
 
     public function getPublikasibyJenisStatus($jenis, $status)
     {
-    //    $this->db->where('id_jenispublikasi',$jenis); 
-        return $this->db->table('tbl_publikasi')->where(array('flag'=>$status,'id_jenispublikasi'=>$jenis))->get()->getResultArray();
-
+        //    $this->db->where('id_jenispublikasi',$jenis); 
+        return $this->db->table('tbl_publikasi')->where(array('flag' => $status, 'id_jenispublikasi' => $jenis))->get()->getResultArray();
     }
 
     public function dashData()
@@ -161,22 +160,22 @@ class ModelPublikasi extends Model
         $arcstatus = array();
 
         $masterArc =  count($this->db->table('tbl_masterpublikasi')
-        ->where('id_jenispublikasi', 1)
-        ->get()->getResultArray());
+            ->where('id_jenispublikasi', 1)
+            ->get()->getResultArray());
 
         $masterNonArc = count($this->db->table('tbl_masterpublikasi')
-        ->where('id_jenispublikasi', 2)
-        ->get()->getResultArray());
-        
+            ->where('id_jenispublikasi', 2)
+            ->get()->getResultArray());
+
         $arc = $this->countARC();
         $nonArc = $this->countNonARC();
-        for($i=1;$i<=4;$i++){
-            $arcstatus[$i]= count($this->getPublikasibyJenisStatus(1,$i));
-            $nonarcstatus[$i]= count($this->getPublikasibyJenisStatus(2,$i));
+        for ($i = 1; $i <= 4; $i++) {
+            $arcstatus[$i] = count($this->getPublikasibyJenisStatus(1, $i));
+            $nonarcstatus[$i] = count($this->getPublikasibyJenisStatus(2, $i));
         }
         // $arcstatus[0]= $this->getPublikasibyJenisStatus(1,1);
 
-        $data= array('masterarc'=>$masterArc,'masternonarc'=>$masterNonArc,'arcstatus'=>$arcstatus,'nonarcstatus'=>$nonarcstatus,'arc'=>$arc,'nonarc'=>$nonArc);
+        $data = array('masterarc' => $masterArc, 'masternonarc' => $masterNonArc, 'arcstatus' => $arcstatus, 'nonarcstatus' => $nonarcstatus, 'arc' => $arc, 'nonarc' => $nonArc);
         return $data;
     }
 
@@ -184,7 +183,7 @@ class ModelPublikasi extends Model
     {
         $this->db->table('tbl_komentar')->delete(['id_komentar' => $id_komentar]);
     }
-    
+
     public function deletePublikasi($id_publikasi)
     {
         return $this->db->table('tbl_publikasi')->delete(['id_publikasi' => $id_publikasi]);
@@ -195,12 +194,16 @@ class ModelPublikasi extends Model
         try {
             $result = $this->db->table('tbl_publikasi')
                 ->where('id_publikasi', $id)
-                ->update([$columnName => $newLink]);
-    
+                ->update([
+                    $columnName => $newLink,
+                    'flag' => 1,             // Mengupdate flag menjadi 1
+                    'status' => 1
+                ]);
+
             if ($result === false) {
                 log_message('error', 'Database error in updateLink: ' . $this->db->error()['message']);
             }
-    
+
             return $result;
         } catch (\Exception $e) {
             log_message('error', 'Exception in updateLink: ' . $e->getMessage());
@@ -212,7 +215,7 @@ class ModelPublikasi extends Model
     {
         return $this->db->table('tbl_replykomentar')->insert($data);
     }
-    
+
     public function getRepliesByKomentar($id_komentar)
     {
         return $this->db->table('tbl_replykomentar')
@@ -235,6 +238,4 @@ class ModelPublikasi extends Model
 
         return $this->db->transStatus(); // Return transaction status
     }
-
-    
 }

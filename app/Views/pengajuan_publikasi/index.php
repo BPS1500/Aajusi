@@ -309,16 +309,20 @@
                     if (response.success) {
 
                         $('#updateLinkModal').modal('hide');
-
+                        if (type === 'publikasi') {
+                            row.find('.btn-primary').attr('href', newLink);
+                        } else if (type === 'spsnrkf') {
+                            row.find('.btn-secondary').attr('href', newLink);
+                        } else if (type === 'spsnres2') {
+                            row.find('.btn-success').attr('href', newLink);
+                        }
                         Swal.fire({
                             title: "Berhasil!",
                             text: "Tautan sudah diperbarui",
                             icon: "success"
                         });
-                        location.reload();
-                        // Reload data dari server
-                        var table = $('#tabel_publikasi').DataTable();
-                        table.ajax.reload();
+
+
                     } else {
                         alert('Gagal memperbarui tautan');
                     }

@@ -9,14 +9,14 @@ use PhpParser\Node\Stmt\Label;
 class Publikasi extends BaseController
 {
     protected $ModelPublikasi;
-    
+
     public function __construct()
     {
         helper('form');
         $this->ModelPublikasi = new \App\Models\ModelPublikasi();
         // $this->session = \Config\Services::session();
     }
-    
+
     public function index()
     {
         $data = [
@@ -69,22 +69,22 @@ class Publikasi extends BaseController
     public function LihatKomentar($id_publikasi)
     {
         $dataKomentar = $this->ModelPublikasi->OneDataKomenter($id_publikasi);
-        
+
         foreach ($dataKomentar as &$komentar) {
             $komentar['replies'] = $this->ModelPublikasi->getRepliesByKomentar($komentar['id_komentar']);
         }
-        
+
         $data = [
             'judul' => 'Komentar',
             'page' => 'v_komentar_penyusun',
             'Komentar' => $dataKomentar,
             'id_publikasi' => $id_publikasi,
         ];
-    
+
         return view('pengajuan_publikasi/komentar_penyusun', $data);
     }
-    
-    
+
+
     public function InsertData()
     {
         if ($this->validate([
@@ -183,14 +183,14 @@ class Publikasi extends BaseController
     {
         $id_komentar = $this->request->getPost('id_komentar');
         $catatan = $this->request->getPost('catatan');
-        
+
         $data = [
             'catatan' => $catatan,
             'updated_at' => date('Y-m-d H:i:s')
         ];
-        
+
         $result = $this->ModelPublikasi->updateKomentar($id_komentar, $data);
-        
+
         if ($result) {
             return $this->response->setJSON(['success' => true]);
         } else {
@@ -211,7 +211,7 @@ class Publikasi extends BaseController
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ];
-    
+
         $this->ModelPublikasi->addCatatanPemeriksa($data);
         return redirect()->to(base_url('Publikasi/LihatKomentar/' . $data['id_publikasi']))->with('success', 'Komentar berhasil ditambahkan');
     }
@@ -220,7 +220,7 @@ class Publikasi extends BaseController
     {
         $model = new \App\Models\ModelPublikasi();
         $statusOptions = $model->getMstStatusReview();
-        
+
         echo json_encode($statusOptions);
     }
 
@@ -228,9 +228,9 @@ class Publikasi extends BaseController
     {
         $id_publikasi = $this->request->getPost('id_publikasi');
         $selesai = $this->request->getPost('status_review');
-        
+
         $result = $this->ModelPublikasi->updateStatus($id_publikasi, ['status' => $selesai, 'flag' => $selesai]);
-        
+
         if ($result) {
             return $this->response->setJSON(['success' => true]);
         } else {
@@ -242,24 +242,24 @@ class Publikasi extends BaseController
     {
         $db = \Config\Database::connect();
         $db->transStart(); // Start a transaction
-    
+
         // Delete replies first
         $db->table('tbl_replykomentar')->where('id_komentar', $id_komentar)->delete();
-    
+
         // Delete the original comment
         $db->table('tbl_komentar')->where('id_komentar', $id_komentar)->delete();
-    
+
         $db->transComplete(); // Complete the transaction
-    
+
         if ($db->transStatus() === FALSE) {
             // If something went wrong, rollback the transaction
             $db->transRollback();
             return redirect()->back()->with('error', 'Failed to delete the comment.');
         }
-    
+
         return redirect()->back()->with('success', 'Comment and its replies deleted successfully.');
     }
-        
+
 
     public function deletePublikasi($id_publikasi)
     {
@@ -285,6 +285,9 @@ class Publikasi extends BaseController
             $id = $this->request->getPost('id');
             $type = $this->request->getPost('type');
             $newLink = $this->request->getPost('new_link');
+            $status = 1;
+            $flag = 1;
+
 
             $columnName = 'link_publikasi';
             if ($type === 'spsnrkf') {
@@ -321,7 +324,7 @@ class Publikasi extends BaseController
         ];
 
         $result = $this->ModelPublikasi->addReplyKomentar($data);
-        
+
         if ($result) {
             return $this->response->setJSON(['success' => true]);
         } else {
@@ -347,5 +350,4 @@ class Publikasi extends BaseController
 
         return $this->response->setBody($html);
     }
-
 }
